@@ -1,0 +1,16 @@
+{
+  "name": "TreasureBuidl_contracts",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/TreasureBuidl/TreasureBuidl",
+  "author": "Veronica <veronica.21.coutts@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts:": {
+    "build": "npx hardhat",
+    "test": "hardhat test"
+  },
+  "dependencies": {
+    "hardhat": "2.4.1"
+  }
+}
