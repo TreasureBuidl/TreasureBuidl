@@ -7,3 +7,9 @@
 </div>
 
 ---
+
+# Next Steps
+
+// TODO make NFT on factory 
+// TODO NFT for built transactions 
+
