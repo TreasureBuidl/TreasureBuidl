@@ -3,10 +3,10 @@ pragma solidity 0.8.0;
 import "./Wrappers/TestWrapper.sol";
 
 contract TxBuidler {
-    TestWrapper internal wrapper_;
+    // TestWrapper internal wrapper_;
 
     constructor(address _wrapper) {
-        wrapper_ = TestWrapper(_wrapper);
+        // wrapper_ = TestWrapper(_wrapper);
     }
 
 
@@ -17,7 +17,7 @@ contract TxBuidler {
     ) 
         external
     {
-        wrapper_.callWrapped(
+        TestWrapper.callWrapped(
             _wrapped,
             _tokens,
             _amounts

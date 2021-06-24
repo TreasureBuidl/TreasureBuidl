@@ -19,11 +19,12 @@ contract TreasureMaps is ERC721 {
     struct TreasureMap {
         // The address that added this treasure map.
         address creator;
+        // Cost in native tokens to explore this map.
+        uint256 callValueTotal;
         // Array of target contract addresses.
-        address[] targetAddresses;
-        // Array of targeted function signatures at matching address.
-        string[] functionSignatures;
-        // Array of encoded parameters for function at target.
+        address[] callTargets;
+        // Array of encoded function signature and parameters for execution at 
+        // target.
         bytes[] callData;
         // Array of `msg.value`'s for target calls. 
         uint[] callValues;
@@ -41,8 +42,7 @@ contract TreasureMaps is ERC721 {
         address indexed creator,
         uint256 indexed mapID,
         string description,
-        address[] targetAddresses,
-        string[] functionSignatures,
+        address[] callTargets,
         bytes[] callData,
         uint[] callValues
     );
@@ -54,6 +54,28 @@ contract TreasureMaps is ERC721 {
 
     constructor() ERC721("Treasure Maps", "tMAP") {
 
+    }
+
+    function exploreMap(uint256 _mapID) public returns(
+        uint256,
+        address[] memory,
+        bytes[] memory,
+        uint[] memory
+    ) {
+        // Noting exploration.
+        treasureMaps_[_mapID].explores += 1;
+        // Emitting exploration.
+        emit MapExplored(
+            msg.sender,
+            _mapID
+        );
+
+        return (
+            treasureMaps_[_mapID].callValueTotal,
+            treasureMaps_[_mapID].callTargets,
+            treasureMaps_[_mapID].callData,
+            treasureMaps_[_mapID].callValues
+        );
     }
 
     /**
@@ -83,15 +105,27 @@ contract TreasureMaps is ERC721 {
         mapIDs_ += 1;
         // Returning map ID.
         mapID = mapIDs_;
+        // Counter for map native token cost.
+        uint256 callCost;
+        // Storage for encoded function calls.
+        bytes[] memory generatedCallData;
+        // Transforming data for efficient storage.
+        for (uint256 i = 0; i < _targetAddr.length; i++) {
+            // Encoding function calls (signature and data)
+            generatedCallData[i] = abi.encodePacked(
+                bytes4(keccak256(bytes(_functionSig[i]))), 
+                _callData[i]
+            );
+            callCost += _callValues[i];
+        }
         // Storing the new map.
         treasureMaps_[mapID] = TreasureMap({
             creator: msg.sender,
-            targetAddresses: _targetAddr,
-            functionSignatures: _functionSig,
-            callData: _callData,
+            callValueTotal: callCost,
+            callTargets: _targetAddr,
+            callData: generatedCallData,
             callValues: _callValues,
-            explores: 0,
-            activeMap: true
+            explores: 0
         });
         // Emitting data.
         emit TreasureMapAdded(
@@ -99,41 +133,44 @@ contract TreasureMaps is ERC721 {
             mapID,
             _description,
             _targetAddr,
-            _functionSig,
-            _callData,
+            generatedCallData,
             _callValues
         );
     }
 
     function executeMap(
+        address _treasureMaps,
         uint256 _mapID
     )
         external
     {
-        TreasureMap memory map = treasureMaps_[_mapID];
-        // Ensures the map exists
-        require(
-            map.creator != address(0),
-            "MAP: Map does not exist"
-        );
-        // Noting exploration.
-        map.explores += 1;
-        // Executing map instructions
-        for (uint i = 0; i < map.targetAddresses.length; i++) {
-            msg.sender.value(
-                map.callValues[i]
-            )(
-                map.targets[i], 
-                map.values[i], 
-                proposal.signatures[i], 
-                map.calldatas[i], 
-                map.eta
-            );
-        }
-
-        emit MapExplored(
-            msg.sender,
+        // TODO this code would be inside the escrow protected by onlyOwner
+        // Need testing, might want it here so you can call delegate call
+        // from the escrow allowing for context correct execution. 
+        (
+            uint256 callValueTotal,
+            address[] memory callTargets,
+            bytes[] memory callData,
+            uint[] memory callValues
+        ) = TreasureMaps(_treasureMaps).exploreMap(
             _mapID
         );
+        // // Ensures the map exists
+        // require(
+        //     map.creator != address(0),
+        //     "MAP: Map does not exist"
+        // );
+        
+        // // Executing map instructions
+        // for (uint i = 0; i < map.callTargets.length; i++) {
+        //     (bool success, bytes memory returnData) = map.callTargets[i].call{
+        //         value: map.callValues[i]
+        //     }(
+        //         map.callData[i]
+        //     );
+        //     require(success, "MAP: Exploration failed");
+        // }
+
+
     }
 }

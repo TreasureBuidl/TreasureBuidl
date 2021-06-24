@@ -11,7 +11,8 @@
     "test": "hardhat test",
     "cover": "hardhat coverage",
     "local": "hardhat node",
-    "deploy:local": "hardhat run scripts/sample-script.js --network localhost"
+    "deploy:local": "hardhat run scripts/sample-script.js --network localhost",
+    "clean": "rm -rf artifacts && rm -rf cache && rm -rf docs/gen-docs"
   },
   "dependencies": {
     "dotenv": "10.0.0",
