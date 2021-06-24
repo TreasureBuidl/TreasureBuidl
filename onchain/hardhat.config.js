@@ -22,7 +22,7 @@ const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
 const ROPSTEN_PRIVATE_KEY = process.env.ROPSTEN_PRIVATE_KEY;
 
 module.exports = {
-  solidity: "0.7.3",
+  solidity: "0.8.0",
   contractSizer: {
     alphaSort: true,
     runOnCompile: true,
