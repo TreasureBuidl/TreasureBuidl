@@ -136,6 +136,8 @@ contract TreasureMaps is ERC721 {
             generatedCallData,
             _callValues
         );
+
+        _mint(msg.sender, mapID);
     }
 
     function executeMap(
