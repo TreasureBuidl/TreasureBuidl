@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Image from 'next/image'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import NoSSR from 'react-no-ssr'
 import styles from './DragNDropExample.module.css'
@@ -58,7 +59,7 @@ function DragNDropExample() {
             <Droppable droppableId="characters">
               {provided => (
                 <ul
-                  className={`${styles['characters']} w-6`}
+                  className={`${styles['characters']}`}
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
@@ -72,7 +73,7 @@ function DragNDropExample() {
                             {...provided.dragHandleProps}
                           >
                             <div className={styles['characters-Thumb']}>
-                              <img src={thumb} alt={`${name} Thumb`} />
+                              <Image width="300" height="300" src={thumb} />
                             </div>
                             <p>{name}</p>
                           </li>
