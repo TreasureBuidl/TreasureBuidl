@@ -1,8 +1,0 @@
-# General 
-node_modules
-yarn-error.log
-.env
-
-# Hardhat Specific 
-cache
-artifacts

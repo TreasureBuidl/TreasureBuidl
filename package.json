@@ -1,0 +1,24 @@
+{
+  "name": "TreasureBuidl",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "yarn workspace onchain build",
+    "test": "yarn workspace onchain test",
+    "cover": "yarn workspace onchain cover",
+    "local": "yarn workspace onchain local",
+    "deploy:local": "yarn workspace onchain deploy:local",
+    "next:dev": "yarn workspace frontend dev",
+    "next:build": "yarn workspace frontend build",
+    "next:start": "yarn workspace frontend start"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/hardhat",
+      "**/hardhat/**"
+    ]
+  }
+}
