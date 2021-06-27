@@ -52,19 +52,21 @@ contract TreasureMaps is ModifiedErc721 {
     // Token IDs (type COORDINATES) to coordinate details.
     mapping(uint256 => Coordinates) public treasureCoordinates_;
 
-    event TreasureMapAdded(
-        address indexed creator,
-        uint256 indexed mapID,
-        string description,
-        address[] callTargets,
-        bytes[] callData,
-        uint[] callValues
-    );
+    // event TreasureMapAdded(
+    //     address indexed creator,
+    //     uint256 indexed mapID,
+    //     string description,
+    //     address[] callTargets,
+    //     bytes[] callData,
+    //     uint[] callValues
+    // );
 
-    event MapExplored(
-        address indexed explorer,
-        uint256 indexed mapID
-    );
+    // event MapExplored(
+    //     address indexed explorer,
+    //     uint256 indexed mapID
+    // );
+
+    event Testing(uint256 mapID, uint256 coordinatesID);
 
     constructor() ModifiedErc721("Treasure Maps", "tMAP") {
 
@@ -100,17 +102,8 @@ contract TreasureMaps is ModifiedErc721 {
             _callData,
             _callValues
         );
-        // Emitting data.
-        // TODO better data. 
-        // emit TreasureMapAdded(
-        //     msg.sender,
-        //     treasureMapID,
-        //     _description,
-        //     _targetAddr,
-        //     _functionSig,
-        //     _callValues
-        // );
-
+        // TODO Emitting data. 
+        emit Testing(treasureMapID, coordinatesID);
     }
 
     // function exploreMap(uint256 _mapID) public returns(

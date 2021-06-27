@@ -11,6 +11,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
 /**
+ * @author  @vonie610 (Twitter & Telegram) | @Nicca42 (GitHub)
  * @dev     Implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721]
  *          Non-Fungible Token Standard, including the Metadata extension, but
  *          not including the Enumerable extension, which is available
