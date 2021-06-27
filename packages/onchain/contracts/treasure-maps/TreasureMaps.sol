@@ -128,51 +128,64 @@ contract TreasureMaps is ModifiedErc721 {
     //     );
     // }
 
-    // function executeMap(
-    //     address _treasureMaps,
-    //     uint256 _mapID
-    // )
-    //     external
-    // {
-    //     // TODO this code would be inside the escrow protected by onlyOwner
-    //     // Need testing, might want it here so you can call delegate call
-    //     // from the escrow allowing for context correct execution. 
-    //     (
-    //         uint256 callValueTotal,
-    //         address[] memory callTargets,
-    //         bytes[] memory callData,
-    //         uint[] memory callValues
-    //     ) = TreasureMaps(_treasureMaps).exploreMap(
-    //         _mapID
-    //     );
-    //     // // Ensures the map exists
-    //     // require(
-    //     //     map.creator != address(0),
-    //     //     "MAP: Map does not exist"
-    //     // );
+    function executeMap(
+        uint256 _treasureMap,
+        uint256 _treasureCoordinates
+    )
+        external
+    {
+        // TODO this code would be inside the escrow protected by onlyOwner
+        // Need testing, might want it here so you can call delegate call
+        // from the escrow allowing for context correct execution. 
+        // (
+        //     uint256 callValueTotal,
+        //     address[] memory callTargets,
+        //     bytes[] memory callData,
+        //     uint[] memory callValues
+        // ) = TreasureMaps(_treasureMaps).exploreMap(
+        //     _mapID
+        // );
+        // // Ensures the map exists
+        // require(
+        //     map.creator != address(0),
+        //     "MAP: Map does not exist"
+        // );
 
-    //     // // Storage for encoded function calls.
-    //     // bytes[] memory generatedCallData;
-    //     // // Transforming data for efficient storage.
-    //     // for (uint256 i = 0; i < _targetAddr.length; i++) {
-    //     //     // Encoding function calls (signature and data)
-    //     //     generatedCallData[i] = abi.encodePacked(
-    //     //         bytes4(keccak256(bytes(_functionSig[i]))), 
-    //     //         _callData[i]
-    //     //     );
-    //     //     callCost += _callValues[i];
-    //     // }
+        require(
+            treasureMaps_[_treasureMap].creator != address(0),
+            "Map does not exist"
+        );
+
+        TreasureMap memory map = treasureMaps_[_treasureMap];
+        Coordinates memory coords = treasureCoordinates_[_treasureCoordinates];
         
-    //     // // Executing map instructions
-    //     // for (uint i = 0; i < map.callTargets.length; i++) {
-    //     //     (bool success, bytes memory returnData) = map.callTargets[i].call{
-    //     //         value: map.callValues[i]
-    //     //     }(
-    //     //         map.callData[i]
-    //     //     );
-    //     //     require(success, "MAP: Exploration failed");
-    //     // }
-    // }
+        require(
+            map.callTargets.length == coords.callData.length,
+            "MAP: Coords and map mismatch"
+        );
+        // TODO the coordinates should know what map they can be used on
+
+        // Storage for encoded function calls.
+        bytes[] memory generatedCallData;
+        // Transforming data for efficient storage.
+        for (uint256 i = 0; i < map.callTargets.length; i++) {
+            // Encoding function calls (signature and data)
+            generatedCallData[i] = abi.encodePacked(
+                bytes4(keccak256(bytes(map.callFunctionSigs[i]))), 
+                coords.callData[i]
+            );
+        }
+        
+        // Executing map instructions
+        for (uint i = 0; i < map.callTargets.length; i++) {
+            (bool success, bytes memory returnData) = map.callTargets[i].call{
+                value: coords.callValues[i]
+            }(
+                generatedCallData[i]
+            );
+            require(success, "MAP: Exploration failed");
+        }
+    }
 
     function _addMap(
         address _creator,
