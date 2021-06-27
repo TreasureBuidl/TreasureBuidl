@@ -5,6 +5,10 @@ import "solidity-coverage";
 import "hardhat-gas-reporter";
 import "hardhat-contract-sizer";
 import "@nomiclabs/hardhat-waffle";
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
 
 /**
  * API key for using Infura. To generate keys go to https://infura.io/

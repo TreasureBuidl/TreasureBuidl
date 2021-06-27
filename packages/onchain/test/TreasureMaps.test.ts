@@ -1,17 +1,17 @@
 const { expect } = require("chai");
-const { ethers, network } = require('hardhat');
+const { ethers } = require('hardhat');
 
 describe("Initial Tests", () =>  {
   // Contracts
-  let TreasureMapsInstance;
-  let TokenOneInstance;
-  let TokenTwoInstance;
+  let TreasureMapsInstance: any;
+  let TokenOneInstance: any;
+  let TokenTwoInstance: any;
    
   // Signers
-  let owner;
-  let buyer;
-  let buyer_two;
-  let invalid;
+  let owner: any;
+  let buyer: any;
+  let buyer_two: any;
+  let invalid: any;
 
   	beforeEach(async () => {
 		// Getting all the contracts 
@@ -27,24 +27,30 @@ describe("Initial Tests", () =>  {
 			invalid
 		] = await ethers.getSigners();
 
+        console.log("0");
+
       	// Deploying contract
         TreasureMapsInstance = await TreasureMaps.deploy();
+        console.log("1");
         TokenOneInstance = await TokenOne.deploy(
             "Token One",
             "TKN1"
         );
+        console.log("1");
         TokenTwoInstance = await TokenTwo.deploy(
             "Token Two",
             "TKN2"
         );
+        console.log("1");
         TokenOneInstance.mint(
             buyer.address,
             1000
         );
+        console.log("1");
   	});
 
-	describe("Minting tokens", () => { 
-		it("Can mint a token", async () => {
+	describe("Minting maps", () => { 
+		it("Nominal Mint", async () => {
             const description = "This is a test description for treasure";
             // Mint tokens on one, mint on two, transfer on one.
             const targets = [
@@ -57,10 +63,35 @@ describe("Initial Tests", () =>  {
                 "mint(address,uint256)",
                 "transfer(address,uint256)"
             ];
+            const calldata = [
+                ethers.abiCoder.encode(
+                    ["address","uint256"],
+                    [buyer.address, 1000]
+                ),
+                ethers.abiCoder.encode(
+                    ["address","uint256"],
+                    [buyer.address, 2000]
+                ),
+                ethers.abiCoder.encode(
+                    ["address","uint256"],
+                    [buyer_two.address, 500]
+                )
+            ];
+            const callValues = [
+                0,
+                0,
+                0
+            ];
 
-            await TreasureMapsInstance.connect(buyer).createTreasure(
+            let tx = await (await TreasureMapsInstance.connect(buyer).createTreasure(
+                description,
+                targets,
+                functions,
+                calldata,
+                callValues
+            )).wait();
 
-            )
+            console.log(tx);
 		});
 	});
 });
