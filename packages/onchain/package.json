@@ -12,10 +12,11 @@
     "cover": "hardhat coverage",
     "local": "hardhat node",
     "deploy:local": "hardhat run scripts/sample-script.js --network localhost",
-    "clean": "rm -rf artifacts && rm -rf cache && rm -rf docs/gen-docs"
+    "clean": "rm -rf artifacts && rm -rf cache && rm -rf docs/gen-docs && coverage.json && coverage",
+    "deep-clean": "yarn clean && rm -rf node_modules && yarn.lock"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.1.0",
+    "@openzeppelin/contracts": "4.1.0",
     "dotenv": "10.0.0",
     "hardhat": "2.3.0"
   },
@@ -25,7 +26,7 @@
     "chai": "4.2.0",
     "ethereum-waffle": "3.0.0",
     "ethers": "5.0.0",
-    "hardhat-contract-sizer": "^2.0.3",
+    "hardhat-contract-sizer": "2.0.3",
     "hardhat-docgen": "1.1.1",
     "hardhat-gas-reporter": "1.0.4",
     "solidity-coverage": "0.7.16"
