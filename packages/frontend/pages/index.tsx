@@ -1,12 +1,9 @@
-import DragNDropExample from '@components/DragNDropExample'
-
+import NavBar
+ from "@components/NavBar"
 export default function Home() {
   return (
-    <div className="flex flex-col justify-center p-20">
-      <h1>TreasureBuidl</h1>
-      <div className="w-60">
-        <DragNDropExample />
-      </div>
+    <div className="bg-darkBlue h-screen w-screen">
+      <NavBar/>
     </div>
   )
 }

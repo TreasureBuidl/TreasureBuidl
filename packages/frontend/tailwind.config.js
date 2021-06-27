@@ -5,7 +5,11 @@ module.exports = {
     colors: {
       darkBlue: '#212B38',
       darkerBlue: '#1E272E',
-      purple: '#726EFF',
+      purple: {
+        DEFAULT: '#726EFF',
+        dark: '#5855c6',
+        darker: '#3f3d8d'
+      },
       white: '#FFFFFF',
       offWhite: '#C4C3D0',
       aave: '#B6509E',
@@ -18,7 +22,9 @@ module.exports = {
     extend: {},
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['active'],
+    }
   },
   plugins: [],
 }
