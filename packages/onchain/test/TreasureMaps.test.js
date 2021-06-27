@@ -53,10 +53,10 @@ describe("Initial Tests", () =>  {
                 TokenOneInstance.address
             ];
             const functions = [
-                "",
-                "",
-                ""
-            ]
+                "mint(address,uint256)",
+                "mint(address,uint256)",
+                "transfer(address,uint256)"
+            ];
 
             await TreasureMapsInstance.connect(buyer).createTreasure(
 
