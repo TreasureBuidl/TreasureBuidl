@@ -6,6 +6,7 @@ const Web3 = require('web3');
 describe("Initial Tests", () =>  {
   // Contracts
   let TreasureMapsInstance: any;
+  let TreasurePlanetInstance: any;
   let TokenOneInstance: any;
   let TokenTwoInstance: any;
    
@@ -21,6 +22,7 @@ describe("Initial Tests", () =>  {
   	beforeEach(async () => {
 		// Getting all the contracts 
 		const TreasureMaps = await ethers.getContractFactory("TreasureMaps");
+		const TreasurePlanet = await ethers.getContractFactory("TreasurePlanet");
 		const TokenOne = await ethers.getContractFactory("Erc20_Token");
 		const TokenTwo = await ethers.getContractFactory("Erc20_Token");
 
@@ -34,6 +36,9 @@ describe("Initial Tests", () =>  {
 
       	// Deploying contract
         TreasureMapsInstance = await TreasureMaps.deploy();
+        TreasurePlanetInstance = await TreasurePlanet.deploy(
+            TreasureMapsInstance.address
+        );
         TokenOneInstance = await TokenOne.deploy(
             "Token One",
             "TKN1"
@@ -42,10 +47,10 @@ describe("Initial Tests", () =>  {
             "Token Two",
             "TKN2"
         );
-        TokenOneInstance.mint(
-            buyer.address,
-            1000
-        );
+        // TokenOneInstance.mint(
+        //     TreasurePlanetInstance.address,
+        //     1000
+        // );
   	});
 
 	describe("Minting maps", () => { 
@@ -126,7 +131,7 @@ describe("Initial Tests", () =>  {
     }
 
     describe("Executing maps", () => {
-        it.only("Nominal Execution", async () => {
+        it("Nominal Execution", async () => {
             const description = "This is a test description for treasure";
             const targets = [
                 TokenOneInstance.address,
@@ -197,6 +202,86 @@ describe("Initial Tests", () =>  {
             console.log(balance2.toString());
             console.log(balance1After.toString());
             console.log(balance2After.toString());
+        });
+
+        it.only("Nominal Planet Execution", async () => {
+            const description = "This is a test description for treasure";
+            const targets = [
+                TokenOneInstance.address,
+                TokenTwoInstance.address,
+                TokenOneInstance.address
+            ];
+            const functions = [
+                "mint(address,uint256)",
+                "mint(address,uint256)",
+                "transfer(address,uint256)"
+            ];
+            const calldata = [
+                paramBuilder(
+                    [
+                        "address",
+                        "uint256"
+                    ], 
+                    [
+                        TreasurePlanetInstance.address.toString(),
+                        "5000"
+                    ]
+                ),
+                paramBuilder(
+                    [
+                        "address",
+                        "uint256"
+                    ], 
+                    [
+                        TreasurePlanetInstance.address.toString(),
+                        "2000"
+                    ]
+                ),
+                paramBuilder(
+                    [
+                        "address",
+                        "uint256"
+                    ], 
+                    [
+                        buyer_two.address.toString(),
+                        "2000"
+                    ]
+                )
+            ];
+            const callValues = [
+                0,
+                0,
+                0
+            ];
+
+            await TreasureMapsInstance.connect(buyer).createTreasure(
+                description,
+                targets,
+                functions,
+                calldata,
+                callValues
+            );
+
+            let balance1 = await TokenOneInstance.balanceOf(TreasurePlanetInstance.address);
+            let balance2 = await TokenOneInstance.balanceOf(buyer_two.address);
+            let balance3 = await TokenTwoInstance.balanceOf(TreasurePlanetInstance.address);
+
+            let tx = await (await 
+                TreasurePlanetInstance.execute(2)
+            ).wait();
+
+            console.log(tx.events)
+
+            let balance1After = await TokenOneInstance.balanceOf(TreasurePlanetInstance.address);
+            let balance2After = await TokenOneInstance.balanceOf(buyer_two.address);
+            let balance3After = await TokenTwoInstance.balanceOf(TreasurePlanetInstance.address);
+
+            console.log(balance1.toString());
+            console.log(balance2.toString());
+            console.log(balance3.toString());
+            console.log(balance1After.toString());
+            console.log(balance2After.toString());
+            console.log(balance3After.toString());
         });
     });
 });
