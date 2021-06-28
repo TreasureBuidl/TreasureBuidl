@@ -1,5 +1,7 @@
 const { expect } = require("chai");
 const { ethers } = require('hardhat');
+// const { Web3 } = require('web3');
+const Web3 = require('web3');
 
 describe("Initial Tests", () =>  {
   // Contracts
@@ -12,6 +14,9 @@ describe("Initial Tests", () =>  {
   let buyer: any;
   let buyer_two: any;
   let invalid: any;
+
+  const provider = new ethers.getDefaultProvider();
+  let web3 = new Web3(provider);
 
   	beforeEach(async () => {
 		// Getting all the contracts 
@@ -27,26 +32,20 @@ describe("Initial Tests", () =>  {
 			invalid
 		] = await ethers.getSigners();
 
-        console.log("0");
-
       	// Deploying contract
         TreasureMapsInstance = await TreasureMaps.deploy();
-        console.log("1");
         TokenOneInstance = await TokenOne.deploy(
             "Token One",
             "TKN1"
         );
-        console.log("1");
         TokenTwoInstance = await TokenTwo.deploy(
             "Token Two",
             "TKN2"
         );
-        console.log("1");
         TokenOneInstance.mint(
             buyer.address,
             1000
         );
-        console.log("1");
   	});
 
 	describe("Minting maps", () => { 
@@ -99,15 +98,36 @@ describe("Initial Tests", () =>  {
                 callValues
             )).wait();
 
-            console.log(tx);
+            // console.log(tx);
 		});
 	});
 
-    describe("Executing maps", () => {
-        it("Nominal Execution", async () => {
-            const description = "This is a test description for treasure";
+    function paramBuilder(paramType: Array<string>, params: Array<string>): String {
+        let encoded:String[] = new Array(params.length);
 
-            console.log(buyer.address)
+        for (let i = 0; i < params.length; i++) {
+            encoded[i] = web3.eth.abi.encodeParameter(
+                paramType[i], params[i]
+            );
+        }
+
+        // Starts with 0x as first param needs to start with 0x. 
+        let concatEncoded: String = new String("0x");
+
+        for (let i = 0; i < params.length; i++) {
+            let fullEncoded:String = encoded[i];
+            // Slices of the 0x
+            fullEncoded = fullEncoded.slice(2);
+            // Adds it to the string
+            concatEncoded = concatEncoded.concat(fullEncoded.toString());
+        }
+
+        return concatEncoded;
+    }
+
+    describe("Executing maps", () => {
+        it.only("Nominal Execution", async () => {
+            const description = "This is a test description for treasure";
             const targets = [
                 TokenOneInstance.address,
                 TokenTwoInstance.address
@@ -119,24 +139,33 @@ describe("Initial Tests", () =>  {
                 // "transfer(address,uint256)"
             ];
             const calldata = [
-                "00000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c800000000000000000000000000000000000000000000000000000000000003e8",
-                "00000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c800000000000000000000000000000000000000000000000000000000000007d0"
-                // ethers.utils.keccak256(
-                //     buyer.address, 1000
-                // ),
-                // ethers.utils.keccak256(
-                //     buyer.address, 2000
-                // ),
-                // ethers.utils.solidityKeccak256(
-                //     ["address","uint256"],
-                //     [buyer_two.address, 500]
-                // )
+                paramBuilder(
+                    [
+                        "address",
+                        "uint256"
+                    ], 
+                    [
+                        buyer.address.toString(),
+                        "1000"
+                    ]
+                ),
+                paramBuilder(
+                    [
+                        "address",
+                        "uint256"
+                    ], 
+                    [
+                        buyer.address.toString(),
+                        "2000"
+                    ]
+                )
             ];
             const callValues = [
                 0,
                 0
-                // 0
             ];
+
+            //0x40c10f1900000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c800000000000000000000000000000000000000000000000000000000000003e8
 
             let tx = await (await TreasureMapsInstance.connect(buyer).createTreasure(
                 description,
@@ -146,10 +175,20 @@ describe("Initial Tests", () =>  {
                 callValues
             )).wait();
 
+            // console.log(tx.events[1]);
+
+            let data = await TreasureMapsInstance.getCoordinates(2);
+            console.log(data)
+
             let balance1 = await TokenOneInstance.balanceOf(buyer.address);
             let balance2 = await TokenTwoInstance.balanceOf(buyer.address);
 
-            await TreasureMapsInstance.connect(buyer).executeMap(1,2);
+            // await TreasureMapsInstance.connect(buyer).testExecution(
+            //     TokenOneInstance.address,
+            //     0,
+            //     "0x40c10f1900000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c800000000000000000000000000000000000000000000000000000000000003e8"
+            // );
+            await TreasureMapsInstance.connect(buyer).executeMap(2);
 
             let balance1After = await TokenOneInstance.balanceOf(buyer.address);
             let balance2After = await TokenTwoInstance.balanceOf(buyer.address);

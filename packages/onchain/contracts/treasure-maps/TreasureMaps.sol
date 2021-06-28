@@ -42,15 +42,27 @@ contract TreasureMaps is ModifiedErc721 {
     bytes32 constant COORDINATES = bytes32(keccak256("COORDINATES"));
         // Coordinates contain the function parameters and call native values.
     struct Coordinates {
+        // Array of target contract addresses.
+        address[] callTargets;
         // Cost in native tokens to explore this map.
         uint256 callValueTotal;
-        // Array of parameters for execution with function.
+        // Array of encoded function & parameters for execution at target.
         bytes[] callData;
         // Array of `msg.value`'s for target calls. 
         uint[] callValues;
     }
     // Token IDs (type COORDINATES) to coordinate details.
     mapping(uint256 => Coordinates) public treasureCoordinates_;
+
+    function getCoordinates(uint256 _ID) public view returns(
+        address[] memory callTargets,
+        uint256[] memory callValues,
+        bytes[] memory callData
+    ) {
+        callTargets = treasureCoordinates_[_ID].callTargets;
+        callValues = treasureCoordinates_[_ID].callValues;
+        callData = treasureCoordinates_[_ID].callData;
+    }
 
     // event TreasureMapAdded(
     //     address indexed creator,
@@ -98,91 +110,34 @@ contract TreasureMaps is ModifiedErc721 {
         );
 
         coordinatesID = _addCoordinates(
+            treasureMapID,
             msg.sender,
             _callData,
             _callValues
         );
         // TODO Emitting data. 
-        emit Testing(treasureMapID, coordinatesID);
+        // emit Testing(treasureMapID, coordinatesID);
     }
 
-    // function exploreMap(uint256 _mapID) public returns(
-    //     uint256,
-    //     address[] memory,
-    //     bytes[] memory,
-    //     uint[] memory
-    // ) {
-    //     // Noting exploration.
-    //     treasureMaps_[_mapID].explores += 1;
-    //     // Emitting exploration.
-    //     emit MapExplored(
-    //         msg.sender,
-    //         _mapID
-    //     );
-
-    //     return (
-    //         treasureMaps_[_mapID].callValueTotal,
-    //         treasureMaps_[_mapID].callTargets,
-    //         treasureMaps_[_mapID].callData,
-    //         treasureMaps_[_mapID].callValues
-    //     );
-    // }
-
     function executeMap(
-        uint256 _treasureMap,
         uint256 _treasureCoordinates
     )
         external
     {
-        // TODO this code would be inside the escrow protected by onlyOwner
-        // Need testing, might want it here so you can call delegate call
-        // from the escrow allowing for context correct execution. 
-        // (
-        //     uint256 callValueTotal,
-        //     address[] memory callTargets,
-        //     bytes[] memory callData,
-        //     uint[] memory callValues
-        // ) = TreasureMaps(_treasureMaps).exploreMap(
-        //     _mapID
-        // );
-        // // Ensures the map exists
-        // require(
-        //     map.creator != address(0),
-        //     "MAP: Map does not exist"
-        // );
-
-        require(
-            treasureMaps_[_treasureMap].creator != address(0),
-            "Map does not exist"
-        );
-
-        TreasureMap memory map = treasureMaps_[_treasureMap];
         Coordinates memory coords = treasureCoordinates_[_treasureCoordinates];
         
         require(
-            map.callTargets.length == coords.callData.length,
-            "MAP: Coords and map mismatch"
+            coords.callTargets.length != 0,
+            "Map does not exist"
         );
-        // TODO the coordinates should know what map they can be used on
 
-        // Storage for encoded function calls.
-        bytes[] memory generatedCallData;
-        // Transforming data for efficient storage.
-        for (uint256 i = 0; i < map.callTargets.length; i++) {
-            // Encoding function calls (signature and data)
-            generatedCallData[i] = abi.encodePacked(
-                bytes4(keccak256(bytes(map.callFunctionSigs[i]))), 
-                coords.callData[i]
-            );
-        }
-        
         // Executing map instructions
-        for (uint i = 0; i < map.callTargets.length; i++) {
-            (bool success, bytes memory returnData) = map.callTargets[i].call{
-                value: coords.callValues[i]
-            }(
-                generatedCallData[i]
-            );
+        for (uint i = 0; i < coords.callTargets.length; i++) {
+            (bool success, bytes memory returnData) = coords.callTargets[i].call{
+                    value: coords.callValues[i]
+                }(
+                    coords.callData[i]
+                );
             require(success, "MAP: Exploration failed");
         }
     }
@@ -213,7 +168,10 @@ contract TreasureMaps is ModifiedErc721 {
         _mint(TREASURE_MAP, _creator, tokenID);
     }
 
+    event Test(bytes[] encoded);
+
     function _addCoordinates(
+        uint256 _treasureMap,
         address _creator,
         bytes[] calldata _callData,
         uint256[] calldata _callValues
@@ -221,8 +179,13 @@ contract TreasureMaps is ModifiedErc721 {
         internal
         returns(uint256 tokenID)
     {
+        TreasureMap memory map = treasureMaps_[_treasureMap];
+
+        require(map.creator != address(0), "Map does not exist");
+
         require(
-            _callData.length == _callValues.length,
+            _callData.length == _callValues.length &&
+            map.callTargets.length == _callData.length,
             "MAP: Array lengths differ"
         );
 
@@ -231,14 +194,24 @@ contract TreasureMaps is ModifiedErc721 {
 
         // Counter for map native token cost.
         uint256 callCost;
+        // Storage for encoded function calls.
+        bytes[] memory generatedCallData = new bytes[](map.callTargets.length);
         // Transforming data for efficient storage.
-        for (uint256 i = 0; i < _callData.length; i++) {
+        for (uint256 i = 0; i < map.callTargets.length; i++) {
+            // Encoding function calls (signature and data)
+            generatedCallData[i] = abi.encodePacked(
+                bytes4(keccak256(bytes(map.callFunctionSigs[i]))), 
+                _callData[i]
+            );
             callCost += _callValues[i];
         }
 
+        emit Test(generatedCallData);
+
         treasureCoordinates_[tokenID] = Coordinates({
+            callTargets: map.callTargets,
             callValueTotal: callCost,
-            callData: _callData,
+            callData: generatedCallData,
             callValues: _callValues
         });
 
