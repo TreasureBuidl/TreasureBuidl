@@ -22,7 +22,7 @@ contract TreasureMaps is ModifiedErc721 {
     bytes32 constant TREASURE_MAP = bytes32(keccak256("TREASURE_MAP"));
         // Treasure maps contain the targets and target function signatures.
     // Storage for treasure map information.
-    struct TreasureMap {
+    struct TreasureOutline {
         // The address that added this treasure map.
         address creator;
         // Array of target contract addresses.
@@ -37,7 +37,9 @@ contract TreasureMaps is ModifiedErc721 {
         // uint256 mapFee;
     }
     // Token IDs (type TREASURE_MAP) to treasure map instructions.
-    mapping(uint256 => TreasureMap) public treasureMaps_;
+    mapping(uint256 => TreasureOutline) public TreasureOutlines_;
+    // TODO Make treasure outlines something you need to specifically make 
+    // not the default thing created
 
     bytes32 constant COORDINATES = bytes32(keccak256("COORDINATES"));
         // Coordinates contain the function parameters and call native values.
@@ -53,6 +55,11 @@ contract TreasureMaps is ModifiedErc721 {
     }
     // Token IDs (type COORDINATES) to coordinate details.
     mapping(uint256 => Coordinates) public treasureCoordinates_;
+    // TODO treasureMaps_
+    // TODO Make treasure coords treasure maps and the default. 
+    // will need to store all the info inside. 
+    // will need a conditional treasure outline param which will then 
+    // ignore passed in variables for the ones specified in the outline. 
 
     function getCoordinates(uint256 _ID) public view returns(
         address[] memory callTargets,
@@ -140,6 +147,8 @@ contract TreasureMaps is ModifiedErc721 {
                 );
             require(success, "MAP: Exploration failed");
         }
+
+        // TODO should emit return data?
     }
 
     function _addMap(
@@ -158,7 +167,7 @@ contract TreasureMaps is ModifiedErc721 {
         tokenCount_ += 1;
         tokenID = tokenCount_;
 
-        treasureMaps_[tokenID] = TreasureMap({
+        TreasureOutlines_[tokenID] = TreasureOutline({
             creator: _creator,
             callTargets: _callTargets,
             callFunctionSigs: _functionSigs,
@@ -179,7 +188,7 @@ contract TreasureMaps is ModifiedErc721 {
         internal
         returns(uint256 tokenID)
     {
-        TreasureMap memory map = treasureMaps_[_treasureMap];
+        TreasureOutline memory map = TreasureOutlines_[_treasureMap];
 
         require(map.creator != address(0), "Map does not exist");
 
