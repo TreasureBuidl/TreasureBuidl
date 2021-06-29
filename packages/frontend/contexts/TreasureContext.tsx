@@ -3,8 +3,9 @@ import React, {
   useReducer
 } from 'react';
 import lodashClonedeep from 'lodash.clonedeep';
+import { Action } from 'types/Treasure.types';
 
-const initialTreasureState = {
+const initialTreasureState: { actions: Action[] } = {
   actions: [],
 };
 
@@ -52,15 +53,15 @@ const treasureReducer = (state, act) => {
 
 const TreasureContext = createContext({
   ...initialTreasureState,
-  addAction: () => { },
-  removeAction: () => { },
+  addAction: (action: Action) => { },
+  removeAction: (action: Action) => { },
   clearActions: () => { },
 });
 
 export const TreasureProvider = ({ children }) => {
   const [treasureState, treasureDispatch] = useReducer(treasureReducer, initialTreasureState);
 
-  const addAction = (action) => {
+  const addAction = (action: Action) => {
     if (!action) {return}
     treasureDispatch({
       type: 'ADDACTION',
@@ -70,7 +71,7 @@ export const TreasureProvider = ({ children }) => {
     });
   };
 
-  const removeAction = (action) => {
+  const removeAction = (action: Action) => {
     if (!action) {return}
     treasureDispatch({
       type: 'REMOVEACTION',
