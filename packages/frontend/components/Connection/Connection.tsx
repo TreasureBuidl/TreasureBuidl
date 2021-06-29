@@ -10,7 +10,7 @@ function Connection() {
     }
     return (
         <div>
-            <button onClick={connectWallet}>Connect Wallet!</button>
+            <button onClick={connectWallet}>Connect Wallet!!</button>
         </div>
     )
 }
