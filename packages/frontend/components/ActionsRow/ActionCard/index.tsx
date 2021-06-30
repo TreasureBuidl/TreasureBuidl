@@ -1,8 +1,12 @@
 import React from 'react'
 import { Action, Protocol } from 'types/Treasure.types'
+import AmountInput from '@components/ActionsRow/ActionCard/AmountInput'
+import useTreasure from 'hooks/useTreasure'
 import classnames from 'classnames'
 
 function ActionCard({ action }: { action: Action }) {
+  const { updateAction } = useTreasure();
+
   const getBackground = (protocol: Protocol): string => {
     switch (protocol) {
       case Protocol.Aave:
@@ -16,8 +20,30 @@ function ActionCard({ action }: { action: Action }) {
     }
   }
 
+  const handleInputQuantityChange = (event) => {
+    updateAction({
+      ...action,
+      input: {
+        ...action.input,
+        quantity: event.target.value,
+      }
+    })
+  }
+
+  const handleOutputQuantityChange = (event) => {
+    updateAction({
+      ...action,
+      output: {
+        ...action.output,
+        quantity: event.target.value,
+      }
+    })
+  }
+
+  const inputBoxHeight = 126
+  const outputBoxHeight = 170
+
   return (
-    // will this be a problem for postcss?
     <div
       className="-ml-5 bg-no-repeat bg-center"
       style={{
@@ -39,6 +65,41 @@ function ActionCard({ action }: { action: Action }) {
       >
         {action.type.operation}
       </div>
+      <form>
+        <div className='flex flex-col'>
+          {action.input ? (
+            <div className='flex flex-col' style={{height: inputBoxHeight}}>
+              <div className='text-offWhite text-sm pl-4 pt-2'>
+                Input
+              </div>
+              <div style={{height: inputBoxHeight}}>
+                <AmountInput amount={action.input} handleChange={handleInputQuantityChange}/>
+              </div>
+            </div>
+          ) : (
+            <div style={{height: inputBoxHeight}}>
+            </div>
+          )}
+          <div className={classnames('ml-11', {
+            "bg-aave": action.type.protocol === Protocol.Aave,
+            "bg-compound": action.type.protocol === Protocol.Compound,
+            "bg-uniswap": action.type.protocol === Protocol.Uniswap
+            })} style={{width: 214, height: 2}}></div>
+          {action.output ? (
+            <div className='flex flex-col' style={{height: outputBoxHeight}}>
+              <div className='text-offWhite text-sm pl-4 pt-10'>
+                Output
+              </div>
+              <div style={{height: inputBoxHeight}}>
+                <AmountInput amount={action.output} handleChange={handleOutputQuantityChange}/>
+              </div>
+            </div>
+          ) : (
+            <div style={{height: outputBoxHeight}}>
+            </div>
+          )}
+        </div>
+      </form>
     </div>
   )
 }

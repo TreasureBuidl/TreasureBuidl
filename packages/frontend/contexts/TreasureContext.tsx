@@ -39,6 +39,20 @@ const treasureReducer = (state, act) => {
         return { ...state };
       }
     }
+    case 'UPDATEACTION': {
+      const { action } = act.payload;
+      const indexToUpdate = state.actions.findIndex(b => b.id === action.id);
+      if (indexToUpdate >= 0) {
+        const newActionsArray = lodashClonedeep(state.actions);
+        newActionsArray[indexToUpdate] = action;
+        return {
+          ...state,
+          actions: newActionsArray
+        };
+      } else {
+        return { ...state };
+      }
+    }
     case 'CLEAR': {
       return {
         ...state,
@@ -55,6 +69,7 @@ const TreasureContext = createContext({
   ...initialTreasureState,
   addAction: (action: Action) => { },
   removeAction: (action: Action) => { },
+  updateAction: (action: Action) => { },
   clearActions: () => { },
 });
 
@@ -81,6 +96,16 @@ export const TreasureProvider = ({ children }) => {
     });
   };
 
+  const updateAction = (action: Action) => {
+    if (!action) {return}
+    treasureDispatch({
+      type: 'UPDATEACTION',
+      payload: {
+        action
+      }
+    });
+  };
+
   const clearActions = () => {
     treasureDispatch({
       type: 'CLEAR'
@@ -93,6 +118,7 @@ export const TreasureProvider = ({ children }) => {
         ...treasureState,
         addAction,
         removeAction,
+        updateAction,
         clearActions
       }}
     >
