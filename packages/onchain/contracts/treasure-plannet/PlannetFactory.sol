@@ -9,6 +9,12 @@ contract PlanetFactory {
     TokenOwnership public tokenOwnership_;
     address public treasureMaps_;
 
+    event TreasurePlanetCreated(
+        address indexed creator,
+        uint256 indexed tokenID,
+        address indexed planet
+    );
+
     constructor(
         address _tokenOwnership,
         address _treasureMaps
@@ -27,6 +33,12 @@ contract PlanetFactory {
         ));
 
         tokenOwnership_.linkOwnershipToken(
+            tokenID,
+            treasurePlanet
+        );
+
+        emit TreasurePlanetCreated(
+            msg.sender,
             tokenID,
             treasurePlanet
         );
