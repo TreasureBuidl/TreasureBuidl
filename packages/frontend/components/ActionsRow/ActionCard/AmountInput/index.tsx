@@ -11,7 +11,7 @@ function AmountInput({ amount, handleChange }: { amount: Amount, handleChange: (
         {amount.token}
       </div>
       <input className="w-2/5 ml-6 py-1 px-2 text-white text-right leading-tight focus:outline-none" type="text" placeholder="1000.00"
-        style={{background: 'transparent'}} value={amount.quantity} onChange={handleChange}/>
+        style={{background: 'transparent'}} value={amount.quantity ?? ''} onChange={handleChange}/>
     </div>
   )
 }

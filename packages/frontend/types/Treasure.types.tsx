@@ -37,7 +37,7 @@ export enum Token {
 }
 
 export type Amount = {
-  quantity: number
+  quantity?: number
   token: Token
 }
 
