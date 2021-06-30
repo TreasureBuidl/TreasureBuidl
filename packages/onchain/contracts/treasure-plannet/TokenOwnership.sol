@@ -2,6 +2,9 @@
 
 pragma solidity 0.8.0;
 
+import "../treasure-maps/ModifiedErc721.sol";
+import "./ModifiedOwnership.sol";
+
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 
@@ -17,55 +20,101 @@ import "@openzeppelin/contracts/utils/Context.sol";
  * `onlyOwner`, which can be applied to your functions to restrict their use to
  * the owner.
  */
-abstract contract Ownable is Context {
-    // IERC721 internal 
-    address private _owner;
+contract TokenOwnership is ModifiedErc721 {
+    bytes32 constant OWNER_TOKEN = bytes32(keccak256("OWNER_TOKEN"));
 
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    address public factory_;
 
-    /**
-     * @dev Initializes the contract setting the deployer as the initial owner.
-     */
-    constructor () internal {
-        address msgSender = _msgSender();
-        _owner = msgSender;
-        emit OwnershipTransferred(address(0), msgSender);
-    }
+    uint256 public tokenIDCounter_;
+    // Token ID     => Owned contract
+    mapping(uint256 => address) public ownedContracts_;
 
-    /**
-     * @dev Returns the address of the current owner.
-     */
-    function owner() public view virtual returns (address) {
-        return _owner;
-    }
-
-    /**
-     * @dev Throws if called by any account other than the owner.
-     */
-    modifier onlyOwner() {
-        require(owner() == _msgSender(), "Ownable: caller is not the owner");
+    modifier onlyFactory() {
+        require(
+            msg.sender == factory_,
+            "Caller is not factory"
+        );
         _;
     }
 
-    /**
-     * @dev Leaves the contract without owner. It will not be possible to call
-     * `onlyOwner` functions anymore. Can only be called by the current owner.
-     *
-     * NOTE: Renouncing ownership will leave the contract without an owner,
-     * thereby removing any functionality that is only available to the owner.
-     */
-    function renounceOwnership() public virtual onlyOwner {
-        emit OwnershipTransferred(_owner, address(0));
-        _owner = address(0);
+    constructor(
+        string memory _name, 
+        string memory _symbol
+    ) 
+        ModifiedErc721(
+            _name,
+            _symbol
+        )
+    {
+
     }
 
-    /**
-     * @dev Transfers ownership of the contract to a new account (`newOwner`).
-     * Can only be called by the current owner.
-     */
-    function transferOwnership(address newOwner) public virtual onlyOwner {
-        require(newOwner != address(0), "Ownable: new owner is the zero address");
-        emit OwnershipTransferred(_owner, newOwner);
-        _owner = newOwner;
+    function setFactory(address _factory) external {
+        require(
+            factory_ == address(0),
+            "Factory has already been set"
+        );
+        factory_ = _factory;
+        // FUTURE should probably have some kind of ownership setting so that
+        // the factory can transfer its minting rights.
+    }
+
+    function mintOwnershipToken(
+        address _to
+    )
+        external
+        onlyFactory()
+        returns(uint256 tokenID)
+    {
+        tokenIDCounter_ += 1;
+        tokenID = tokenIDCounter_;
+
+        _mint(
+            OWNER_TOKEN,
+            _to,
+            tokenID
+        );
+    }
+
+    function linkOwnershipToken(
+        uint256 _tokenID,
+        address _ownedContract
+    )
+        external
+        onlyFactory()
+    {
+        require(
+            ownedContracts_[_tokenID] == address(0),
+            "Ownership has already been linked"
+        );
+        require(
+            ModifiedOwnership(_ownedContract).isOwned(),
+            "Owned contract invalid"
+        );
+
+        ownedContracts_[_tokenID] = _ownedContract;
+    } 
+
+    function _beforeTokenTransfer(
+        address _from,
+        address _to,
+        uint256 _tokenID
+    ) 
+        internal 
+        override 
+    {
+        ModifiedOwnership ownedContract = ModifiedOwnership(
+            ownedContracts_[_tokenID]
+        );
+        if(_to == address(0)) {
+            // If token is being burnt
+            ownedContract.renounceOwnership();
+        } else if(
+            _from != address(0) &&
+            _to != address(0)
+        ) {
+            // If token is being transferred
+            ownedContract.transferOwnership(_to);
+        }
     }
 }

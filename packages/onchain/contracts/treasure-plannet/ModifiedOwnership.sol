@@ -43,8 +43,12 @@ abstract contract ModifiedOwnership is Context {
     /**
      * @dev Returns the address of the current owner.
      */
-    function owner() public view virtual returns (address) {
+    function owner() public view virtual returns(address) {
         return ownerTokenInstance_.ownerOf(ownerTokenID_);
+    }
+
+    function isOwned() public view returns(bool) {
+        return true;
     }
 
     /**
@@ -71,10 +75,6 @@ abstract contract ModifiedOwnership is Context {
      * thereby removing any functionality that is only available to the owner.
      */
     function renounceOwnership() public virtual onlyToken() returns(bool) {
-        require(
-            _msgSender() == address(ownerTokenInstance_),
-            "Renounce ownership through burn"
-        );
         emit OwnershipTransferred(
             ownerTokenInstance_.ownerOf(ownerTokenID_), 
             address(0)
