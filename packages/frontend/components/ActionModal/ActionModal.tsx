@@ -3,7 +3,7 @@ import Button, { ButtonShape, ButtonSize } from '@components/Button/Button'
 import useTreasure from 'hooks/useTreasure'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { Action, Operation, Protocol } from 'types/Treasure.types'
+import { Action, Operation, Protocol, Token } from 'types/Treasure.types'
 
 type ActionModalProps = {
   toggleActionModal: (state: boolean) => void
@@ -29,7 +29,37 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
         id: uuidv4(),
         type: {
           protocol: Protocol.Aave,
-          operation: Operation.borrow,
+          operation: Operation.deposit,
+        },
+        input: {
+          token: Token.USDT,
+          quantity: null
+        },
+        output: {
+          token: Token.USDC,
+          quantity: null
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
+          protocol: Protocol.Aave,
+          operation: Operation.withdraw,
+        },
+        input: {
+          token: Token.USDT,
+          quantity: null
+        },
+        output: {
+          token: Token.USDC,
+          quantity: null
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
+          protocol: Protocol.Compound,
+          operation: Operation.supply,
         },
       },
       {
@@ -37,13 +67,6 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
         type: {
           protocol: Protocol.Compound,
           operation: Operation.collectComp,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Compound,
-          operation: Operation.deposit,
         },
       },
     ])
