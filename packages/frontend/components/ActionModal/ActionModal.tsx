@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import Button, { ButtonShape, ButtonSize } from '@components/Button/Button'
 import useTreasure from 'hooks/useTreasure'
 import { useEffect } from 'react'
@@ -25,21 +26,21 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
     // How should we load actions?
     setActions([
       {
-        id: '123',
+        id: uuidv4(),
         type: {
           protocol: Protocol.Aave,
           operation: Operation.borrow,
         },
       },
       {
-        id: '456',
+        id: uuidv4(),
         type: {
           protocol: Protocol.Compound,
           operation: Operation.collectComp,
         },
       },
       {
-        id: '786',
+        id: uuidv4(),
         type: {
           protocol: Protocol.Compound,
           operation: Operation.deposit,
