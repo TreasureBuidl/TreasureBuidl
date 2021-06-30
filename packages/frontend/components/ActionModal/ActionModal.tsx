@@ -46,7 +46,7 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
         },
       },
     ])
-  }, [actions])
+  }, [])
 
   return (
     <div className="bg-black bg-opacity-75 h-screen w-screen text-white flex justify-center items-center fixed z-10">
