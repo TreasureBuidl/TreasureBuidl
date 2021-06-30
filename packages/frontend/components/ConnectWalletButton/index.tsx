@@ -26,13 +26,24 @@ function ConnectWalletButton({ size, buttonType, children }: ButtonProps) {
     }
 
     return (
-        <button onClick={connectWallet} className={classnames('text-white py-2 px-4 rounded-lg', {
-            "text-xs": size === ButtonSize.Small,
-            "text-xl": size === ButtonSize.Large,
-            "bg-purple hover:bg-purple-dark active:bg-purple-darker": buttonType === ButtonType.Primary
-        })}>
-            {children}
-        </button>
+        <>
+            {wallet.status === 'connected' ? (
+                <div>
+                    <div>Account: {wallet.account}</div>
+                    <div>Balance: {wallet.balance}</div>
+                    <button onClick={() => wallet.reset()}>Press to Disconnect</button>
+                </div>
+            ) : (
+                <button onClick={connectWallet} className={classnames('text-white py-2 px-4 rounded-lg', {
+                    "text-xs": size === ButtonSize.Small,
+                    "text-xl": size === ButtonSize.Large,
+                    "bg-purple hover:bg-purple-dark active:bg-purple-darker": buttonType === ButtonType.Primary
+                })}>
+                    {children}
+                </button>
+            )}
+        </>
+
     )
 };
 
