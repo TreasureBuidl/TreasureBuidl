@@ -1,7 +1,7 @@
 export enum Protocol {
-  Aave,
-  Compound,
-  Uniswap
+  Aave = 'Aave V2',
+  Compound = 'Compound',
+  Uniswap = 'Uniswap V2',
 }
 
 // #TODO: not all of them, just the ones from the designs
@@ -20,8 +20,8 @@ export enum Operation {
 }
 
 export type ActionType = {
-  protocol: Protocol;
-  operation: Operation;
+  protocol: Protocol
+  operation: Operation
 }
 
 // #TODO: not all of them, just the ones from the designs
@@ -33,17 +33,17 @@ export enum Token {
   Ether,
   Uni,
   USDC,
-  USDT
+  USDT,
 }
 
 export type Amount = {
-  quantity: number;
-  token: Token;
+  quantity: number
+  token: Token
 }
 
 export type Action = {
-  id: string;
-  type: ActionType;
-  input?: Amount;
-  output?: Amount;
-};
+  id: string
+  type: ActionType
+  input?: Amount
+  output?: Amount
+}

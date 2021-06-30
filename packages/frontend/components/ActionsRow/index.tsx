@@ -1,16 +1,14 @@
 import React from 'react'
 import useTreasure from '../../hooks/useTreasure'
-import ActionCard from './ActionCard';
+import ActionCard from './ActionCard'
 
 function ActionsRow() {
-  const { actions } = useTreasure();
+  const { actions } = useTreasure()
 
   return (
-    <div className='mt-48 flex flex-row justify-center'>
+    <div className="flex flex-row justify-center">
       {actions.map((action) => {
-        return (
-          <ActionCard key={action.id} action={action} />
-        )
+        return <ActionCard key={action.id} action={action} />
       })}
     </div>
   )
