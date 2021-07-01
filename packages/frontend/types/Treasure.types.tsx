@@ -1,6 +1,7 @@
 export enum Protocol {
   Aave = 'Aave V2',
   Compound = 'Compound',
+  TreasureBuidl = 'Treasure Buidl',
   Uniswap = 'Uniswap V2',
 }
 

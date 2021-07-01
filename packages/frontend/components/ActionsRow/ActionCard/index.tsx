@@ -42,6 +42,26 @@ function ActionCard({ action }: { action: Action }) {
     })
   }
 
+  const handleInputTokenChange = (event) => {
+    updateAction({
+      ...action,
+      input: {
+        ...action.input,
+        token: event.target.value,
+      }
+    })
+  }
+
+  const handleOutputTokenChange = (event) => {
+    updateAction({
+      ...action,
+      output: {
+        ...action.output,
+        token: event.target.value,
+      }
+    })
+  }
+
   const inputBoxHeight = 126
   const outputBoxHeight = 170
 
@@ -64,6 +84,7 @@ function ActionCard({ action }: { action: Action }) {
             {
               'bg-aave': action.type.protocol === Protocol.Aave,
               'bg-compound': action.type.protocol === Protocol.Compound,
+              'bg-purple': action.type.protocol === Protocol.TreasureBuidl,
               'bg-uniswap': action.type.protocol === Protocol.Uniswap,
             }
           )}
@@ -79,7 +100,7 @@ function ActionCard({ action }: { action: Action }) {
                   Input
                 </div>
                 <div style={{height: inputBoxHeight}}>
-                  <AmountInput amount={action.input} handleChange={handleInputQuantityChange}/>
+                  <AmountInput amount={action.input} handleQuantityChange={handleInputQuantityChange} handleTokenChange={handleInputTokenChange}/>
                 </div>
               </div>
             ) : (
@@ -89,6 +110,7 @@ function ActionCard({ action }: { action: Action }) {
             <div className={classnames('ml-11', {
               "bg-aave": action.type.protocol === Protocol.Aave,
               "bg-compound": action.type.protocol === Protocol.Compound,
+              'bg-purple': action.type.protocol === Protocol.TreasureBuidl,
               "bg-uniswap": action.type.protocol === Protocol.Uniswap
               })} style={{width: 214, height: 2}}></div>
             {action.output ? (
@@ -97,7 +119,7 @@ function ActionCard({ action }: { action: Action }) {
                   Output
                 </div>
                 <div style={{height: inputBoxHeight}}>
-                  <AmountInput amount={action.output} handleChange={handleOutputQuantityChange}/>
+                  <AmountInput amount={action.output} handleQuantityChange={handleOutputQuantityChange} handleTokenChange={handleOutputTokenChange}/>
                 </div>
               </div>
             ) : (
