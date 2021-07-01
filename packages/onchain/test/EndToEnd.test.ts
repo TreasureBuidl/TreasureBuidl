@@ -1,8 +1,6 @@
-let {
-    expect,
-    ethers,
-    Web3
-} = require("./test.settings.ts");
+export const { expect } = require("chai");
+export const { ethers } = require("hardhat");
+export const Web3 = require("web3");
 
 describe("End To End Test", () => {
     const provider = new ethers.getDefaultProvider();
@@ -26,7 +24,7 @@ describe("End To End Test", () => {
 
     beforeEach(async () => {
         // Getting all the contracts
-        const TransactionLibrary = await ethers.getContractFactory("TransactionLibrary");
+        // const TransactionLibrary = await ethers.getContractFactory("TransactionLibrary");
         const TokenOwnership = await ethers.getContractFactory("TokenOwnership");
         const TreasureMaps = await ethers.getContractFactory("TreasureMaps");
         const PlanetFactory = await ethers.getContractFactory("PlanetFactory");
@@ -43,7 +41,7 @@ describe("End To End Test", () => {
         ] = await ethers.getSigners();
 
         // Deploying contract
-        transactionLibrary = await TransactionLibrary.deploy();
+        // transactionLibrary = await TransactionLibrary.deploy();
         tokenOwnership = await TokenOwnership.deploy();
         treasureMaps = await TreasureMaps.deploy();
         planetFactory = await PlanetFactory.deploy(
@@ -57,7 +55,7 @@ describe("End To End Test", () => {
     describe("Deploying a treasure planet", () => {
         it.only("Nominal deployment", async () => {
             let tx = await (
-                await planetFactory.connect().createTreasurePlanet()
+                await planetFactory.connect(planet_owner).createTreasurePlanet()
             ).wait();
 
             console.log(tx.events)

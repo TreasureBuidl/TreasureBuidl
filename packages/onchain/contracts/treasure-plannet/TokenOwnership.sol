@@ -37,13 +37,10 @@ contract TokenOwnership is ModifiedErc721 {
         _;
     }
 
-    constructor(
-        string memory _name, 
-        string memory _symbol
-    ) 
+    constructor() 
         ModifiedErc721(
-            _name,
-            _symbol
+            "Owner Token",
+            "OWT"
         )
     {
 
