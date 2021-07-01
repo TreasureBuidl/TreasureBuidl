@@ -84,6 +84,7 @@ function ActionCard({ action }: { action: Action }) {
             {
               'bg-aave': action.type.protocol === Protocol.Aave,
               'bg-compound': action.type.protocol === Protocol.Compound,
+              'bg-purple': action.type.protocol === Protocol.TreasureBuidl,
               'bg-uniswap': action.type.protocol === Protocol.Uniswap,
             }
           )}
@@ -109,6 +110,7 @@ function ActionCard({ action }: { action: Action }) {
             <div className={classnames('ml-11', {
               "bg-aave": action.type.protocol === Protocol.Aave,
               "bg-compound": action.type.protocol === Protocol.Compound,
+              'bg-purple': action.type.protocol === Protocol.TreasureBuidl,
               "bg-uniswap": action.type.protocol === Protocol.Uniswap
               })} style={{width: 214, height: 2}}></div>
             {action.output ? (

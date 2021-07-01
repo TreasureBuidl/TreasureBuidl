@@ -10,6 +10,8 @@ function ProtocolIcon({ protocol }: { protocol: Protocol }) {
         return 'url(/images/protocolIcons/aaveIcon.png)'
       case Protocol.Compound:
         return 'url(/images/protocolIcons/compoundIcon.png)'
+      case Protocol.TreasureBuidl:
+        return 'url(/images/protocolIcons/treasureBuidlIcon.png)'
       case Protocol.Uniswap:
         return 'url(/images/protocolIcons/uniswapIcon.png)'
       default:

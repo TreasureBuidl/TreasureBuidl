@@ -42,7 +42,7 @@ function Button({
         'text-xl': size === ButtonSize.Large,
         'text-4xl': size === ButtonSize.ExtraLarge,
         'bg-purple hover:bg-purple-dark active:bg-purple-darker':
-          buttonType === ButtonType.Primary,
+          buttonType === ButtonType.Primary || buttonType === Protocol.TreasureBuidl,
         'bg-aave': buttonType === Protocol.Aave,
         'bg-compound': buttonType === Protocol.Compound,
         'bg-uniswap': buttonType === Protocol.Uniswap,

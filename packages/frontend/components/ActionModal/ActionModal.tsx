@@ -28,6 +28,28 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
       {
         id: uuidv4(),
         type: {
+          protocol: Protocol.TreasureBuidl,
+          operation: Operation.deposit,
+        },
+        input: {
+          token: Token.USDT,
+          quantity: null
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
+          protocol: Protocol.TreasureBuidl,
+          operation: Operation.withdraw,
+        },
+        output: {
+          token: Token.USDT,
+          quantity: null
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
           protocol: Protocol.Aave,
           operation: Operation.deposit,
         },
