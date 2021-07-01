@@ -2,7 +2,7 @@ import React from 'react'
 import { Amount } from 'types/Treasure.types'
 import TokenIcon from '@components/TokenIcon'
 
-function AmountInput({ amount, handleChange }: { amount: Amount, handleChange: () => {} }) {
+function AmountInput({ amount, handleChange }: { amount: Amount, handleChange: (event: any) => void }) {
 
   return (
     <div className='flex flex-row ml-4 mt-4' style={{height: 32}}>
