@@ -1,6 +1,5 @@
 import React from 'react'
 import useTreasure from 'hooks/useTreasure'
-import { Token } from 'types/Treasure.types'
 import TokenAmountRow from '@components/TokenAmountRow'
 
 function FromToTreasure() {
