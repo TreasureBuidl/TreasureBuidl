@@ -1,4 +1,4 @@
-import { Protocol } from '../types/Treasure.types';
+import { Protocol, Operation } from '../types/Treasure.types';
 
 
 type Network = {
@@ -25,6 +25,15 @@ class ProjectLibrary {
 
   // Array of descriptions for all params for each function. 
   paramToolTip: string[];
+
+  // Array of operation descriptions i.e. Add Liquidity, Swap, etc.
+  operations: string[];
+
+  // Array of booleans representing whether a function requires an input
+  hasInput: boolean[];
+
+  // Array of booleans representing whether a function provides an output
+  hasOutput: boolean[];
 
   getContractAddress(networkId):string {
     for (let network of this.networks) {
@@ -71,6 +80,9 @@ class UniswapV2Library extends ProjectLibrary {
       "amountIn - The amount of input tokens to send. amountOutMin - The minimum amount of output tokens that must be received for the transaction not to revert. path - An array of token addresses. path.length must be >= 2. Pools for each consecutive pair of addresses must exist and have liquidity. to - Recipient of the output tokens. deadline - Unix timestamp after which the transaction will revert. amounts - The input token amount and all subsequent output token amounts.",
       "amountOut - The amount of output tokens to receive. amountInMax - The maximum amount of input tokens that can be required before the transaction reverts. path - An array of token addresses. path.length must be >= 2. Pools for each consecutive pair of addresses must exist and have liquidity. to - Recipient of the output tokens. deadline - Unix timestamp after which the transaction will revert. amounts - The input token amount and all subsequent output token amounts."
     ];
+    this.operations = [Operation.addLiquidity, Operation.removeLiquidity, Operation.swap, Operation.swap]; // TODO there's two swaps here, UI needs to differentiate somehow
+    this.hasInput = [true, true, true, true];
+    this.hasOutput = [true, true, true, true];
   }
 }
 
@@ -105,7 +117,9 @@ class AaveLibrary extends ProjectLibrary {
       "asset - address of the underlying asset. amount - amount to be borrowed, expressed in wei units. Use uint(-1) to repay the entire debt,  ONLY when the repayment is not executed on behalf of a 3rd party. In case of repayments on behalf of another user, it's recommended to send an _amount slightly higher than the current borrowed amount. rateMode - the type of borrow debt. Stable: 1, Variable: 2. onBehalfOf - address of user who will incur the debt. Use msg.sender when not calling on behalf of a different user.",
       "receiverAddress - address of the contract receiving the funds. Must implement the IFlashLoanReceiver interface. assets - addresses of the reserves to flashloan. amounts - amounts of assets to flashloan. This needs to contain the same number of elements as assets. modes - the types of debt to open if the flashloan is not returned. 0: Don't open any debt, just revert 1: stable mode debt 2: variable mode debt. onBehalfOf - if the associated mode is not 0 then the incurred debt will be applied to the onBehalfOf address. Note: onBehalfOf must already have approved sufficient borrow allowance of the associated asset to msg.sender. params - bytes-encoded parameters to be used by the receiverAddress contract. referralCode - referral code for our referral program"
     ];
-     
+    this.operations = [Operation.deposit, Operation.withdraw, Operation.borrow, Operation.repay, Operation.openFlashloan];
+    this.hasInput = [true, true, false, true, false];
+    this.hasOutput = [true, true, true, true, true];
   }
 }
 
@@ -147,6 +161,9 @@ class CompoundLibrary extends ProjectLibrary {
       "borrowAmount - The amount of the underlying asset to be borrowed.",
       "repayAmount - The amount of the underlying borrowed asset to be repaid. A value of -1 can be used to repay the full amount."
     ];
+    this.operations = [Operation.deposit, Operation.withdraw, Operation.borrow, Operation.repay];
+    this.hasInput = [true, true, false, true];
+    this.hasOutput = [true, true, true, false];
   }
 }
 

@@ -4,6 +4,7 @@ import useTreasure from 'hooks/useTreasure'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Action, Operation, Protocol, Token } from 'types/Treasure.types'
+import { libraries } from 'libraries/TransactionLibrary';
 import ProtocolIcon from '@components/ProtocolIcon'
 
 type ActionModalProps = {
@@ -24,132 +25,32 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
   }
 
   useEffect(() => {
-    // How should we load actions?
-    setActions([
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.TreasureBuidl,
-          operation: Operation.deposit,
-        },
-        input: {
-          token: Token.USDT,
-          quantity: null,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.TreasureBuidl,
-          operation: Operation.withdraw,
-        },
-        output: {
-          token: Token.USDT,
-          quantity: null,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Aave,
-          operation: Operation.deposit,
-        },
-        input: {
-          token: Token.USDT,
-          quantity: null,
-        },
-        output: {
-          token: Token.USDC,
-          quantity: null,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Aave,
-          operation: Operation.withdraw,
-        },
-        input: {
-          token: Token.USDT,
-          quantity: null,
-        },
-        output: {
-          token: Token.USDC,
-          quantity: null,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Aave,
-          operation: Operation.borrow,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Aave,
-          operation: Operation.repay,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Uniswap,
-          operation: Operation.swap,
-        },
-        input: {
-          token: Token.USDC,
-          quantity: null,
-        },
-        output: {
-          token: Token.USDT,
-          quantity: null,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Uniswap,
-          operation: Operation.addLiquidity,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Uniswap,
-          operation: Operation.removeLiquidity,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Compound,
-          operation: Operation.supply,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Compound,
-          operation: Operation.withdraw,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Compound,
-          operation: Operation.repay,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Compound,
-          operation: Operation.collectComp,
-        },
-      },
-    ])
+    let actions = [];
+    for (let protocol of libraries) {
+      for (let i = 0; i < protocol.functionSig.length; i++) {
+        let action = {
+          id: uuidv4(),
+          type: {
+            protocol: protocol.protocol,
+            operation: protocol.operations[i],
+          }
+        };
+        if (protocol.hasInput[i]) {
+          action["input"] = {
+            token: Token.USDT,
+            quantity: null,
+          }
+        }
+        if (protocol.hasOutput[i]) {
+          action["output"] = {
+            token: Token.USDC,
+            quantity: null,
+          }
+        }
+        actions.push(action);
+      }
+    }
+    setActions(actions);
   }, [])
 
   return (
