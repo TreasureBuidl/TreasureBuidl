@@ -81,8 +81,65 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
       {
         id: uuidv4(),
         type: {
+          protocol: Protocol.Aave,
+          operation: Operation.borrow,
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
+          protocol: Protocol.Aave,
+          operation: Operation.repay,
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
+          protocol: Protocol.Uniswap,
+          operation: Operation.swap,
+        },
+        input: {
+          token: Token.USDC,
+          quantity: null,
+        },
+        output: {
+          token: Token.USDT,
+          quantity: null,
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
+          protocol: Protocol.Uniswap,
+          operation: Operation.addLiquidity,
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
+          protocol: Protocol.Uniswap,
+          operation: Operation.removeLiquidity,
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
           protocol: Protocol.Compound,
           operation: Operation.supply,
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
+          protocol: Protocol.Compound,
+          operation: Operation.withdraw,
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
+          protocol: Protocol.Compound,
+          operation: Operation.repay,
         },
       },
       {

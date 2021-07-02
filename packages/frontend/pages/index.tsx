@@ -1,4 +1,5 @@
 import NavBar from '@components/NavBar'
+import FromToTreasure from '@components/FromToTreasure'
 import ActionsRow from '@components/ActionsRow'
 import Button, {
   ButtonSize,
@@ -20,7 +21,10 @@ export default function Home() {
         ''
       )}
       <NavBar />
-      <div className="flex flex-row justify-center mt-48">
+      <div className="flex justify-center mt-12">
+        <FromToTreasure />
+      </div>
+      <div className="flex flex-row justify-center mt-24">
         <div className="flex flex-row w-5/6 items-center scrollbar scrollbar-thumb-offWhite scrollbar-track-darkerBlue pb-12"
           style={{ height: 501 }}>
           <ActionsRow />
