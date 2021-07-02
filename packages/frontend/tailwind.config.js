@@ -31,7 +31,7 @@ module.exports = {
     },
     fontFamily: {
       body: ['Open Sans'],
-      display: ['Gidole']
+      display: ['Gidole'],
     },
     extend: {},
   },
@@ -40,5 +40,5 @@ module.exports = {
       backgroundColor: ['active'],
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar')],
 }

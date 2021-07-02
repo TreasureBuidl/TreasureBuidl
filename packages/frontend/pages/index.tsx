@@ -21,7 +21,7 @@ export default function Home() {
       )}
       <NavBar />
       <div className="flex flex-row justify-center items-center mt-48">
-        <div className="w-3/4 overflow-x-scroll">
+        <div className="w-3/4 overflow-x-scroll scrollbar scrollbar-thumb-offWhite scrollbar-track-darkerBlue pb-12">
           <ActionsRow />
         </div>
         <div className="ml-24">
