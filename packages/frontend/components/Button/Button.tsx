@@ -21,7 +21,7 @@ type ButtonProps = {
   size: ButtonSize
   buttonType: ButtonType | Protocol
   buttonShape?: ButtonShape
-  onClick?: () => void
+  onClick?: (any) => any
   children: any
 }
 
