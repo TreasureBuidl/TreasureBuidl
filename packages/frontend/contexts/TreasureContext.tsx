@@ -24,17 +24,17 @@ const getTreasureAmountsForActions = (actions: Action[]): TreasureAmounts => {
 
   actions.forEach(action => {
     if (action.input) {
-      if (tokens[action.input.token]) {
-        tokens[action.input.token] = tokens[action.input.token] + (action.input.quantity ?? 0)
+      if (tokens[action.input.token] !== undefined) {
+        tokens[action.input.token] = parseFloat(tokens[action.input.token]) + parseFloat(action.input.quantity as any ?? 0)
       } else {
-        tokens[action.input.token] = action.input.quantity ?? 0
+        tokens[action.input.token] = parseFloat(action.input.quantity as any ?? 0)
       }
     }
     if (action.output) {
-      if (tokens[action.output.token]) {
-        tokens[action.output.token] = tokens[action.output.token] - (action.output.quantity ?? 0)
+      if (tokens[action.output.token] !== undefined) {
+        tokens[action.output.token] = parseFloat(tokens[action.output.token]) - parseFloat(action.output.quantity as any ?? 0)
       } else {
-        tokens[action.output.token] = -action.output.quantity ?? 0
+        tokens[action.output.token] = -parseFloat(action.output.quantity as any ?? 0)
       }
     }
   })
