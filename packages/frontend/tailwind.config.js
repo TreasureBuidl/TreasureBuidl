@@ -31,6 +31,7 @@ module.exports = {
     },
     fontFamily: {
       body: ['Open Sans'],
+      display: ['Gidole']
     },
     extend: {},
   },

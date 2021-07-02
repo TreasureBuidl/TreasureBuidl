@@ -29,6 +29,28 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
       {
         id: uuidv4(),
         type: {
+          protocol: Protocol.TreasureBuidl,
+          operation: Operation.deposit,
+        },
+        input: {
+          token: Token.USDT,
+          quantity: null,
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
+          protocol: Protocol.TreasureBuidl,
+          operation: Operation.withdraw,
+        },
+        output: {
+          token: Token.USDT,
+          quantity: null,
+        },
+      },
+      {
+        id: uuidv4(),
+        type: {
           protocol: Protocol.Aave,
           operation: Operation.deposit,
         },
@@ -75,7 +97,7 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
 
   return (
     <div className="bg-black bg-opacity-75 h-screen w-screen text-white flex justify-center items-center fixed z-10">
-      <div className="w-3/4 h-3/4 bg-darkBlue border-white border-2 rounded-lg p-10">
+      <div className="w-3/4 h-3/4 bg-darkBlue border-white border-2 rounded-lg p-10 overflow-x-auto ">
         <div className="grid grid-cols-3 grid-flow-col items-center mb-10">
           <h2 className="col-start-2 text-center uppercase text-2xl">
             New Action

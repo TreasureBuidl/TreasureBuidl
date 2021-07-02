@@ -21,7 +21,9 @@ export default function Home() {
       )}
       <NavBar />
       <div className="flex flex-row justify-center items-center mt-48">
-        <ActionsRow />
+        <div className="w-3/4 overflow-x-scroll">
+          <ActionsRow />
+        </div>
         <div className="ml-24">
           <Button
             size={ButtonSize.ExtraLarge}
