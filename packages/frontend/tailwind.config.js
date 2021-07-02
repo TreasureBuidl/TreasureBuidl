@@ -13,13 +13,25 @@ module.exports = {
       black: '#000000',
       white: '#FFFFFF',
       offWhite: '#C4C3D0',
-      aave: '#B6509E',
-      uniswap: '#FF007A',
-      compound: '#00D395',
+      aave: {
+        DEFAULT: '#B6509E',
+        dark: '#994385',
+        darker: '#7c326b',
+      },
+      uniswap: {
+        DEFAULT: '#FF007A',
+        dark: '#a70050',
+        darker: '#640030',
+      },
+      compound: {
+        DEFAULT: '#00D395',
+        dark: '#068b64',
+        darker: '#01583f',
+      },
     },
     fontFamily: {
       body: ['Open Sans'],
-      display: ['Gidole']
+      display: ['Gidole'],
     },
     extend: {},
   },
@@ -28,5 +40,5 @@ module.exports = {
       backgroundColor: ['active'],
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar')],
 }

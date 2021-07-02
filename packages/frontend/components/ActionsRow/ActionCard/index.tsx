@@ -6,7 +6,7 @@ import useTreasure from 'hooks/useTreasure'
 import classnames from 'classnames'
 
 function ActionCard({ action }: { action: Action }) {
-  const { updateAction } = useTreasure();
+  const { updateAction } = useTreasure()
 
   const getBackground = (protocol: Protocol): string => {
     // #TODO: Add the rest of the protocol images
@@ -28,7 +28,7 @@ function ActionCard({ action }: { action: Action }) {
       input: {
         ...action.input,
         quantity: event.target.value,
-      }
+      },
     })
   }
 
@@ -38,7 +38,7 @@ function ActionCard({ action }: { action: Action }) {
       output: {
         ...action.output,
         quantity: event.target.value,
-      }
+      },
     })
   }
 
@@ -48,7 +48,7 @@ function ActionCard({ action }: { action: Action }) {
       input: {
         ...action.input,
         token: event.target.value,
-      }
+      },
     })
   }
 
@@ -58,7 +58,7 @@ function ActionCard({ action }: { action: Action }) {
       output: {
         ...action.output,
         token: event.target.value,
-      }
+      },
     })
   }
 
@@ -66,7 +66,7 @@ function ActionCard({ action }: { action: Action }) {
   const outputBoxHeight = 170
 
   return (
-    <div className='flex flex-col'>
+    <div className="flex flex-col">
       <div className="pr-14 pb-2 self-center">
         <ProtocolIcon protocol={action.type.protocol} />
       </div>
@@ -93,38 +93,46 @@ function ActionCard({ action }: { action: Action }) {
           {action.type.operation}
         </div>
         <form>
-          <div className='flex flex-col'>
+          <div className="flex flex-col">
             {action.input ? (
-              <div className='flex flex-col' style={{height: inputBoxHeight}}>
-                <div className='text-offWhite text-sm pl-4 pt-2'>
-                  Input
-                </div>
-                <div style={{height: inputBoxHeight}}>
-                  <AmountInput amount={action.input} handleQuantityChange={handleInputQuantityChange} handleTokenChange={handleInputTokenChange}/>
+              <div className="flex flex-col" style={{ height: inputBoxHeight }}>
+                <div className="text-offWhite text-sm pl-4 pt-2">Input</div>
+                <div style={{ height: inputBoxHeight }}>
+                  <AmountInput
+                    amount={action.input}
+                    handleQuantityChange={handleInputQuantityChange}
+                    handleTokenChange={handleInputTokenChange}
+                  />
                 </div>
               </div>
             ) : (
-              <div style={{height: inputBoxHeight}}>
-              </div>
+              <div style={{ height: inputBoxHeight }}></div>
             )}
-            <div className={classnames('ml-11', {
-              "bg-aave": action.type.protocol === Protocol.Aave,
-              "bg-compound": action.type.protocol === Protocol.Compound,
-              'bg-purple': action.type.protocol === Protocol.TreasureBuidl,
-              "bg-uniswap": action.type.protocol === Protocol.Uniswap
-              })} style={{width: 214, height: 2}}></div>
+            <div
+              className={classnames('ml-11', {
+                'bg-aave': action.type.protocol === Protocol.Aave,
+                'bg-compound': action.type.protocol === Protocol.Compound,
+                'bg-purple': action.type.protocol === Protocol.TreasureBuidl,
+                'bg-uniswap': action.type.protocol === Protocol.Uniswap,
+              })}
+              style={{ width: 214, height: 2 }}
+            ></div>
             {action.output ? (
-              <div className='flex flex-col' style={{height: outputBoxHeight}}>
-                <div className='text-offWhite text-sm pl-4 pt-10'>
-                  Output
-                </div>
-                <div style={{height: inputBoxHeight}}>
-                  <AmountInput amount={action.output} handleQuantityChange={handleOutputQuantityChange} handleTokenChange={handleOutputTokenChange}/>
+              <div
+                className="flex flex-col"
+                style={{ height: outputBoxHeight }}
+              >
+                <div className="text-offWhite text-sm pl-4 pt-10">Output</div>
+                <div style={{ height: inputBoxHeight }}>
+                  <AmountInput
+                    amount={action.output}
+                    handleQuantityChange={handleOutputQuantityChange}
+                    handleTokenChange={handleOutputTokenChange}
+                  />
                 </div>
               </div>
             ) : (
-              <div style={{height: outputBoxHeight}}>
-              </div>
+              <div style={{ height: outputBoxHeight }}></div>
             )}
           </div>
         </form>

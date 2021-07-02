@@ -42,10 +42,14 @@ function Button({
         'text-xl': size === ButtonSize.Large,
         'text-4xl': size === ButtonSize.ExtraLarge,
         'bg-purple hover:bg-purple-dark active:bg-purple-darker':
-          buttonType === ButtonType.Primary || buttonType === Protocol.TreasureBuidl,
-        'bg-aave': buttonType === Protocol.Aave,
-        'bg-compound': buttonType === Protocol.Compound,
-        'bg-uniswap': buttonType === Protocol.Uniswap,
+          buttonType === ButtonType.Primary ||
+          buttonType === Protocol.TreasureBuidl,
+        'bg-aave hover:bg-aave-dark active:bg-aave-darker':
+          buttonType === Protocol.Aave,
+        'bg-compound hover:bg-compound-dark active:bg-compound-darker':
+          buttonType === Protocol.Compound,
+        'bg-uniswap hover:bg-uniswap-dark active:bg-uniswap-darker':
+          buttonType === Protocol.Uniswap,
       })}
     >
       {children}
