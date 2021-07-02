@@ -7,7 +7,7 @@ function ActionsRow() {
 
   const computeWidth = () => {
     if (!actions.length) {
-      return '50%'
+      return '47%'
     }
 
     const plusButtonWidth = 96
