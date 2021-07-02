@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import Button, { ButtonShape, ButtonSize } from '@components/Button/Button'
 import useTreasure from 'hooks/useTreasure'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Action, Operation, Protocol, Token } from 'types/Treasure.types'
+import ProtocolIcon from '@components/ProtocolIcon'
 
 type ActionModalProps = {
   toggleActionModal: (state: boolean) => void
@@ -33,11 +34,11 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
         },
         input: {
           token: Token.USDT,
-          quantity: null
+          quantity: null,
         },
         output: {
           token: Token.USDC,
-          quantity: null
+          quantity: null,
         },
       },
       {
@@ -48,11 +49,11 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
         },
         input: {
           token: Token.USDT,
-          quantity: null
+          quantity: null,
         },
         output: {
           token: Token.USDC,
-          quantity: null
+          quantity: null,
         },
       },
       {
@@ -91,6 +92,7 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
         <div>
           {protocols.map((protocol) => (
             <div key={protocol} className="mb-10">
+              <ProtocolIcon protocol={protocol} />
               <div className="uppercase text-xl mb-10">{protocol}</div>
               <div className="flex flex-row justify-start">
                 {actions
