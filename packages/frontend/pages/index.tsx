@@ -8,20 +8,9 @@ import Button, {
 import React from 'react'
 import ActionModal from '@components/ActionModal/ActionModal'
 import { useState } from 'react'
-import useTreasure from 'hooks/useTreasure'
 
 export default function Home() {
   const [actionModalState, setActionModalState] = useState(false)
-  const { actions } = useTreasure()
-
-  const computeWidth = () => {
-    if (!actions.length) {
-      return '50%'
-    }
-
-    const buttonWidth = 96
-    return 295 * actions.length + buttonWidth
-  }
 
   return (
     <div className="bg-darkBlue h-screen w-screen">
@@ -34,7 +23,7 @@ export default function Home() {
       <div className="flex flex-row justify-center mt-48">
         <div className="flex flex-row w-5/6 items-center scrollbar scrollbar-thumb-offWhite scrollbar-track-darkerBlue pb-12"
           style={{ height: 501 }}>
-          <ActionsRow style={{ minWidth: computeWidth() }}/>
+          <ActionsRow />
           <div className="mt-14">
             <Button
               size={ButtonSize.ExtraLarge}
