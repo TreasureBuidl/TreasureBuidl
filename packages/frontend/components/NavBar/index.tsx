@@ -1,6 +1,5 @@
 import React from 'react'
-import Button from '@components/Button/Button'
-import { ButtonSize, ButtonType } from '@components/Button/Button'
+import ConnectWalletButton from '@components/NavBar/ConnectWalletButton'
 
 function NavBar() {
   return (
@@ -9,9 +8,7 @@ function NavBar() {
         <div className='bg-no-repeat bg-center' style={{ backgroundImage: 'url(/images/protocolIcons/treasureBuidlIcon.png)', width: 74, height: 52 }}></div>
         <p className="font-display text-4xl text-white self-center">TREASURE BUIDL</p>
       </div>
-      <Button size={ButtonSize.Large} buttonType={ButtonType.Primary}>
-        CONNECT WALLET
-      </Button>
+      <ConnectWalletButton />
     </div>
   )
 }
