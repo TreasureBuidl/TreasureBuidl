@@ -38,7 +38,7 @@ function Button({
       className={classnames('text-white py-2 px-4 rounded-lg', {
         'rounded-full w-24 h-24': buttonShape === ButtonShape.Circular,
         'w-40': buttonShape === ButtonShape.Wide,
-        'text-xs': size === ButtonSize.Small,
+        'text-xs font-bold': size === ButtonSize.Small,
         'text-xl': size === ButtonSize.Large,
         'text-4xl': size === ButtonSize.ExtraLarge,
         'bg-purple hover:bg-purple-dark active:bg-purple-darker':

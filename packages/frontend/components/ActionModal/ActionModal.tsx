@@ -113,10 +113,12 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
         </div>
         <div>
           {protocols.map((protocol) => (
-            <div key={protocol} className="mb-10">
-              <ProtocolIcon protocol={protocol} />
-              <div className="uppercase text-xl mb-10">{protocol}</div>
-              <div className="flex flex-row justify-start">
+            <div key={protocol}>
+              <div className="flex flex-row mb-4 items-center">
+                <ProtocolIcon protocol={protocol} />
+                <div className="uppercase text-xl ml-4">{protocol}</div>
+              </div>
+              <div className="flex flex-row justify-start mb-10">
                 {actions
                   .filter((action) => action.type.protocol === protocol)
                   .map((action) => (

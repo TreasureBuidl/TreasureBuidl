@@ -20,19 +20,20 @@ export default function Home() {
         ''
       )}
       <NavBar />
-      <div className="flex flex-row justify-center items-center mt-48">
-        <div className="w-3/4 overflow-x-scroll scrollbar scrollbar-thumb-offWhite scrollbar-track-darkerBlue pb-12">
+      <div className="flex flex-row justify-center mt-48">
+        <div className="flex flex-row w-5/6 items-center scrollbar scrollbar-thumb-offWhite scrollbar-track-darkerBlue pb-12"
+          style={{ height: 501 }}>
           <ActionsRow />
-        </div>
-        <div className="ml-24">
-          <Button
-            size={ButtonSize.ExtraLarge}
-            buttonType={ButtonType.Primary}
-            buttonShape={ButtonShape.Circular}
-            onClick={() => setActionModalState(true)}
-          >
-            +
-          </Button>
+          <div className="mt-14">
+            <Button
+              size={ButtonSize.ExtraLarge}
+              buttonType={ButtonType.Primary}
+              buttonShape={ButtonShape.Circular}
+              onClick={() => setActionModalState(true)}
+            >
+              +
+            </Button>
+          </div>
         </div>
       </div>
     </div>
