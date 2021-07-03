@@ -4,6 +4,7 @@ import useTreasure from 'hooks/useTreasure'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Action, Operation, Protocol, Token } from 'types/Treasure.types'
+import { libraries } from 'libraries/TransactionLibrary';
 import ProtocolIcon from '@components/ProtocolIcon'
 
 type ActionModalProps = {
@@ -14,142 +15,41 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
   const [actions, setActions] = useState([])
   const { addAction } = useTreasure()
 
-  const protocols = Array.from(
-    new Set(actions.map((actions: Action) => actions.type.protocol))
-  )
-
   const handleActionSelection = (action: Action) => {
     addAction(action)
     toggleActionModal(false)
   }
 
   useEffect(() => {
-    // How should we load actions?
-    setActions([
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.TreasureBuidl,
-          operation: Operation.deposit,
-        },
-        input: {
-          token: Token.USDT,
-          quantity: null,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.TreasureBuidl,
-          operation: Operation.withdraw,
-        },
-        output: {
-          token: Token.USDT,
-          quantity: null,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Aave,
-          operation: Operation.deposit,
-        },
-        input: {
-          token: Token.USDT,
-          quantity: null,
-        },
-        output: {
-          token: Token.USDC,
-          quantity: null,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Aave,
-          operation: Operation.withdraw,
-        },
-        input: {
-          token: Token.USDT,
-          quantity: null,
-        },
-        output: {
-          token: Token.USDC,
-          quantity: null,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Aave,
-          operation: Operation.borrow,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Aave,
-          operation: Operation.repay,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Uniswap,
-          operation: Operation.swap,
-        },
-        input: {
-          token: Token.USDC,
-          quantity: null,
-        },
-        output: {
-          token: Token.USDT,
-          quantity: null,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Uniswap,
-          operation: Operation.addLiquidity,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Uniswap,
-          operation: Operation.removeLiquidity,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Compound,
-          operation: Operation.supply,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Compound,
-          operation: Operation.withdraw,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Compound,
-          operation: Operation.repay,
-        },
-      },
-      {
-        id: uuidv4(),
-        type: {
-          protocol: Protocol.Compound,
-          operation: Operation.collectComp,
-        },
-      },
-    ])
+    let actions = [];
+    libraries.forEach((protocol) => {
+      protocol.functionSig.forEach((_, i) => {
+        let action = {
+          id: uuidv4(),
+          type: {
+            protocol: protocol.protocol,
+            operation: protocol.operations[i],
+          },
+          iconUrl: protocol.iconUrl,
+          cardUrl: protocol.cardUrl,
+          cssClass: protocol.cssClass,
+        };
+        if (protocol.hasInput[i]) {
+          action["input"] = {
+            token: Token.USDT,
+            quantity: null,
+          }
+        }
+        if (protocol.hasOutput[i]) {
+          action["output"] = {
+            token: Token.USDC,
+            quantity: null,
+          }
+        }
+        actions.push(action);
+      });
+    });
+    setActions(actions);
   }, [])
 
   return (
@@ -169,20 +69,20 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
           </div>
         </div>
         <div>
-          {protocols.map((protocol) => (
-            <div key={protocol}>
+          {libraries.map((library, i) => (
+            <div key={i}>
               <div className="flex flex-row mb-4 items-center">
-                <ProtocolIcon protocol={protocol} />
-                <div className="uppercase text-xl ml-4">{protocol}</div>
+                <ProtocolIcon url={library.iconUrl} />
+                <div className="uppercase text-xl ml-4">{library.protocol}</div>
               </div>
               <div className="flex flex-row justify-start mb-10">
                 {actions
-                  .filter((action) => action.type.protocol === protocol)
+                  .filter((action) => action.type.protocol === library.protocol)
                   .map((action) => (
                     <div key={action.id} className="mr-10">
                       <Button
                         size={ButtonSize.Small}
-                        buttonType={action.type.protocol}
+                        protocolCssClass={action.cssClass}
                         buttonShape={ButtonShape.Wide}
                         onClick={() => handleActionSelection(action)}
                       >

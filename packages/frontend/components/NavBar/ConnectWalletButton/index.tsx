@@ -21,7 +21,7 @@ function ConnectWalletButton() {
   const isConnected = wallet.status === 'connected'
 
   return (
-    <Button size={ButtonSize.Large} buttonType={ButtonType.Primary} onClick={isConnected ? disconnectWallet : connectWallet}>
+    <Button size={ButtonSize.Large} protocolCssClass={ButtonType.Primary} onClick={isConnected ? disconnectWallet : connectWallet}>
       <div className='flex flex-row'>
         {isConnected && <div className='bg-no-repeat bg-center mr-4' style={{backgroundImage: 'url(/images/metamaskIcon.png)', width: 32, height: 32}}></div>}
         <span>
