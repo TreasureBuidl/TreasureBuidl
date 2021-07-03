@@ -156,7 +156,6 @@ describe("End To End Test", () => {
                 treasurePlanet.connect(planet_owner).execute(1)
             ).wait();
 
-            console.log(tx)
         });
     });
 });

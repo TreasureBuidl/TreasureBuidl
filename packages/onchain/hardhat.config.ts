@@ -9,23 +9,6 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-
-/**
- * API key for using Infura. To generate keys go to https://infura.io/
- * @notice  Never hard code API keys within a file that is tracked by git.
- *          This file is tracked by git, as such we pull the API keys from
- *          the `.env` file.
- */
-export const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
-
-/**
- * Private key of deployer
- * @notice  Never hard code private keys within a file that is tracked by git.
- *          This file is tracked by git, as such we pull the private keys from
- *          the `.env` file.
- */
-export const ROPSTEN_PRIVATE_KEY = process.env.ROPSTEN_PRIVATE_KEY;
-
 const config: HardhatUserConfig = {
   solidity: "0.8.0",
   contractSizer: {
@@ -41,6 +24,19 @@ const config: HardhatUserConfig = {
   gasReporter: {
     enabled: true,
   },
+  networks: {
+    localhost: {
+      url: "http://localhost:8545",
+    },
+    rinkeby: {
+      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+      accounts: [`${process.env.RINKEBY_PRIVATE_KEY}`]
+    },
+    // mainnet: {
+    //   url: `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+    //   accounts: [`${process.env.MAIN_PRV_KEY}`]
+    // }
+  }
 };
 
 export default config;
