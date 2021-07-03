@@ -31,3 +31,13 @@ To create treasure map you will need to generate the following information:
     - i.e `[0, 0]`
 
 All these arrays need to be of the same length, as every component is needed for every transaction call. 
+
+## Debugging 
+
+Below is a list of errors you may encounter when building and executing transactions, and what to do if you encounter them: 
+
+| Error message | Where it happened | Why |
+|:-------------:|:-----------------:|:----|
+| `"MAP: Array lengths differ"` | `TreasureMap` => `createTreasure` | The arrays you passed in where not all the same length. Every transaction call needs a corresponding piece from each array. <br> __To debug:__ <br> Check which array is not the right length, and correct the missing field. 
+| `"Map does not exist"` | `TreasurePlanet` => `execute` | The map ID you passed in does not exist on the treasure map contract. <br> __To debug:__ <br> You can check if a treasure map exists before calling it by calling `getTreasureMap(uint256 _id)` on the `TreasureMap`.
+| `"MAP: Exploration failed"` | `TreasurePlanet` => `execute` | One of the calls within your bundle failed to run, so the entire transaction reverted. No state changes will persist. <br> __To debug:__ <br> **1.** Check the basics: <br> **a)** All transfers have the required approval. <br> **b)** Balances are enough for each needed asset. <br> **c)** All the target addresses are correct for the correct network. <br> **d)** The functions you are calling exist on the address on this network (etherscan will be easiest). <br> **e)** The addresses and function signatures line up, same for the parameters and call values. If any are out of order the whole transaction will fail every time, and **you will need to create a new map.** <br> **2.** Go through all of the calls by passing them in individually, running each of them until the failing transaction is found. 
