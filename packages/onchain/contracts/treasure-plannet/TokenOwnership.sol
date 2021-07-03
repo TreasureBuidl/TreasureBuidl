@@ -2,29 +2,22 @@
 
 pragma solidity 0.8.0;
 
-import "../treasure-maps/ModifiedErc721.sol";
+import "../shared/ModifiedErc721.sol";
 import "./ModifiedOwnership.sol";
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "@openzeppelin/contracts/utils/Context.sol";
-
 /**
- * @dev Contract module which provides a basic access control mechanism, where
- * there is an account (an owner) that can be granted exclusive access to
- * specific functions.
- *
- * By default, the owner account will be the one that deploys the contract. This
- * can later be changed with {transferOwnership}.
- *
- * This module is used through inheritance. It will make available the modifier
- * `onlyOwner`, which can be applied to your functions to restrict their use to
- * the owner.
+ * @author  @vonie610 (Twitter & Telegram) | @Nicca42 (GitHub)
+ * @notice  This contract is the ownership token that works with the 
+ *          `ModifiedOwnership` contract (which the owned contract MUST inherit).
+ *          
+ *          !! Transferring the ownership token transfers ownership rights to 
+ *          the owned contract. 
  */
 contract TokenOwnership is ModifiedErc721 {
     bytes32 constant OWNER_TOKEN = bytes32(keccak256("OWNER_TOKEN"));
-
+    // Address of the factory contract.
     address public factory_;
-
+    // Counter for token IDs. 
     uint256 public tokenIDCounter_;
     // Token ID     => Owned contract
     mapping(uint256 => address) public ownedContracts_;
@@ -57,14 +50,22 @@ contract TokenOwnership is ModifiedErc721 {
         return ownedContracts_[tokenID];
     }
 
+    /**
+     * @param   _factory Address of the factory contract. 
+     * @notice  The set factory address will be the only address able to mint
+     *          and link minted tokens to their owned contracts. 
+     *
+     *          This function can only be called once. 
+     *
+     *          // FUTURE should probably have some kind of ownership setting so
+     *          that the factory can transfer its minting rights.
+     */
     function setFactory(address _factory) external {
         require(
             factory_ == address(0),
             "Factory has already been set"
         );
         factory_ = _factory;
-        // FUTURE should probably have some kind of ownership setting so that
-        // the factory can transfer its minting rights.
     }
 
     /**

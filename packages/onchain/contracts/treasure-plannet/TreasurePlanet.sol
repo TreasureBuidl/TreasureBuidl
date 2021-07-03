@@ -11,9 +11,12 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 
 /**
  * @author  @vonie610 (Twitter & Telegram) | @Nicca42 (GitHub)
- * @notice  This contract allows for the storage of ERC 20 | 721 | 1155 so long
- *          they do not require smart receiver hooks. 
- *          // FUTURE allow for future standard hooks to be implemented?
+ * @notice  This contract allows for the storage of ERC20, as well as ERC721 & 
+ *          ERC1155 through the implementation of their receiver hooks. 
+ *
+ *          // FUTURE make generalised catch in fallback to allow for supporting
+ *          future interfaces. I think it might work if the fallback just 
+ *          returns true, but have not tested this. 
  */
 contract TreasurePlanet is ModifiedOwnership, IERC721Receiver, IERC1155Receiver {
     TreasureMaps public maps_;
@@ -36,6 +39,10 @@ contract TreasurePlanet is ModifiedOwnership, IERC721Receiver, IERC1155Receiver 
 
     /**
      * @param   _treasureMaps Address of the treasure map contract. 
+     * @param   _ownerTokenInstance Address of the token contract that 
+     *          determines ownership of this contract.
+     * @param   _ownerTokenID Token ID of the token that represents ownership 
+     *          of this contract. 
      */
     constructor(
         address _treasureMaps,
@@ -46,7 +53,6 @@ contract TreasurePlanet is ModifiedOwnership, IERC721Receiver, IERC1155Receiver 
             _ownerTokenInstance,
             _ownerTokenID
         )
-        public
     {
         maps_ = TreasureMaps(_treasureMaps);
     }
@@ -97,7 +103,7 @@ contract TreasurePlanet is ModifiedOwnership, IERC721Receiver, IERC1155Receiver 
         } else if(_interfaceId == _INTERFACE_ID_ERC1155) {
             return true;
         } else if(_interfaceId == _INTERFACE_ID_ERC1155_BATCH) {
-
+            return true;
         } else {
             return false;
         }

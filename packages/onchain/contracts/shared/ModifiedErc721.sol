@@ -72,6 +72,28 @@ contract ModifiedErc721 is Context, ERC165, IERC721, IERC721Metadata {
     // same price.
     //--------------------------------------------------------------------------
 
+    //--------------------------------------------------------------------------
+    // FUTURE IMPROVEMENTS (possibly make this an EIP?)
+    //--------------------------------------------------------------------------
+    // This contract can be significantly improved via the creation of the 
+    // following public functions:
+    // - `createTokenType(bytes32 _type, bool _publiclyMintable, bool _isBurnable)`
+        // This function allows callers to add unique token types. Marking a 
+        // token as not burnable will block burning and transfering to the 0x0
+        // address. Making a type publicly mintable means that anyone can mint
+        // a token of that type. If the token is not publicly mintable the
+        // minter role can be controlled through:
+        // - `addMinterForType(address _minter, bool _canMint)`
+        // - `addMintControllerForType(address _controller, bool _canAddMinters)`
+    // - `mint(bytes32 _type, address _to)`
+        // Mints a new token (restricted by the token type and minter roles)
+        // Enforces unique token IDs, keeps a count for total circulating supply
+        // of each token type. 
+    // - `burn(uint256 _tokenID)`
+        // Allows for the burning of a token. If burning for the token type is
+        // disabled this function will revert. 
+    //--------------------------------------------------------------------------
+
     /**
      * @param   _owner Address of the owner.
      * @param   _type The type of token.

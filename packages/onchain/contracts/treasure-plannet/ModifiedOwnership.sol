@@ -2,12 +2,12 @@
 
 pragma solidity 0.8.0;
 
-import "../treasure-maps/ModifiedErc721.sol";
+import "../shared/ModifiedErc721.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 
 /**
  * @author  @vonie610 (Twitter & Telegram) | @Nicca42 (GitHub)
- * @author  // TODO Thornton @??? | @thornm9 (GitHub)
+ * @author  @thornm9 (GitHub)
  * @notice  This contract has been modified away from the OZ standard Ownable in
  *          order to allow ownership to be represented by an NFT token.
  *          The owner of the NFT will have ownership rights over the owned 
@@ -25,7 +25,10 @@ abstract contract ModifiedOwnership is Context {
     // ID of the token that is the owner of contract.
     uint256 private ownerTokenID_;
 
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event OwnershipTransferred(
+        address indexed previousOwner, 
+        address indexed newOwner
+    );
 
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
@@ -33,7 +36,7 @@ abstract contract ModifiedOwnership is Context {
     constructor(
         address _ownerTokenInstance,
         uint256 _ownerTokenID
-    ) internal {
+    ) {
         ownerTokenID_ = _ownerTokenID;
         ownerTokenInstance_ = ModifiedErc721(_ownerTokenInstance);
         address currentOwner = ownerTokenInstance_.ownerOf(ownerTokenID_);

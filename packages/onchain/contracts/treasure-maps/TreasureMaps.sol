@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.0;
 
-import "./ModifiedErc721.sol";
+import "../shared/ModifiedErc721.sol";
 
 /**
  * @author  @vonie610 (Twitter & Telegram) | @Nicca42 (GitHub)
@@ -41,7 +41,7 @@ contract TreasureMaps is ModifiedErc721 {
 
     bytes32 constant TREASURE_MAPS = bytes32(keccak256("TREASURE_MAPS"));
         // Treasure Maps contain the function parameters and call native values.
-    struct TreasureMaps {
+    struct TreasureMap {
         // Array of target contract addresses.
         address[] callTargets;
         // Cost in native tokens to explore this map.
@@ -52,7 +52,7 @@ contract TreasureMaps is ModifiedErc721 {
         uint[] callValues;
     }
     // Token IDs (type TREASURE_MAPS) to coordinate details.
-    mapping(uint256 => TreasureMaps) public treasureMaps_;
+    mapping(uint256 => TreasureMap) public treasureMaps_;
     // FUTURE A conditional treasure outline param which will then ignore passed
     // in variables for the ones specified in the outline. 
 
@@ -186,7 +186,7 @@ contract TreasureMaps is ModifiedErc721 {
             callCost += _callValues[i];
         }
 
-        treasureMaps_[tokenID] = TreasureMaps({
+        treasureMaps_[tokenID] = TreasureMap({
             callTargets: _callTargets,
             callValueTotal: callCost,
             callData: generatedCallData,
