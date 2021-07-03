@@ -7,7 +7,6 @@ describe("End To End Test", () => {
     let web3 = new Web3(provider);
 
     // Contracts
-    let transactionLibrary: any;
     let tokenOwnership: any;
     let treasureMaps: any;
     let planetFactory: any;
@@ -54,7 +53,7 @@ describe("End To End Test", () => {
         const PlanetFactory = await ethers.getContractFactory("PlanetFactory");
         const TreasurePlanet = await ethers.getContractFactory("TreasurePlanet");
         const TokenOne = await ethers.getContractFactory("Erc20_Token");
-        const TokenTwo = await ethers.getContractFactory("Erc20_Token");
+        const TokenTwo = await ethers.getContractFactory("Erc721_Token");
 
         // Getting signers
         [
@@ -87,6 +86,10 @@ describe("End To End Test", () => {
             ).wait();
 
             treasurePlanet = TreasurePlanet.attach(tx.events[2].args.planet);
+
+            let reverseCheck = await tokenOwnership.getOwnedContract(
+                planet_owner.address
+            );
         });
 
         it("Cannot create more than one planet per address", async () => {
@@ -246,6 +249,100 @@ describe("End To End Test", () => {
             ).to.be.revertedWith(
                 "ERC721: transfer caller is not owner nor approved"
             );
+        });
+    });
+
+    describe("Token receiving hook tests", () => {
+        it("Creating a treasure planet", async () => {
+            const TreasurePlanet = await ethers.getContractFactory("TreasurePlanet");
+
+            let tx = await (
+                await planetFactory.connect(planet_owner).createTreasurePlanet()
+            ).wait();
+
+            treasurePlanet = TreasurePlanet.attach(tx.events[2].args.planet);
+
+            let reverseCheck = await tokenOwnership.getOwnedContract(
+                planet_owner.address
+            );
+        });
+
+        it("ERC721 token", async () => {
+            let mintTx = await (
+                await testTokenTwo.connect(planet_owner).mint(
+                    planet_owner.address
+                )
+            ).wait();
+
+            let nftTokenID = mintTx.events[0].args.tokenId.toString();
+
+            await testTokenTwo.connect(planet_owner).approve(
+                treasurePlanet.address,
+                nftTokenID
+            );
+
+            let tx = await (
+                await treasureMaps.connect(planet_owner).createTreasure(
+                    "Example test treasure",
+                    [
+                        testTokenTwo.address
+                    ],
+                    [
+                        "safeTransferFrom(address,address,uint256)"
+                    ],
+                    [
+                        paramBuilder(
+                            ["address", "address", "uint256"],
+                            [
+                                planet_owner.address.toString(), 
+                                treasurePlanet.address.toString(), 
+                                nftTokenID
+                            ]
+                        )
+                    ],
+                    [
+                        0
+                    ]
+                )
+            ).wait();
+
+            let mapID = tx.events[1].args.mapID.toString();
+            let ownerBefore = await testTokenTwo.balanceOf(planet_owner.address);
+            let planetBefore = await testTokenTwo.balanceOf(treasurePlanet.address);
+
+            let txTwo = await (
+                await treasurePlanet.connect(planet_owner).execute(
+                    mapID.toString()
+                )
+            ).wait();
+
+            let ownerAfter = await testTokenTwo.balanceOf(planet_owner.address);
+            let planetAfter = await testTokenTwo.balanceOf(treasurePlanet.address);
+
+            expect(
+				ownerBefore.toString(),
+				"Owner does not own token before"
+			).to.equal(
+				"1"
+			);
+            expect(
+				ownerAfter.toString(),
+				"Owner still own token after"
+			).to.equal(
+				"0"
+			);
+            expect(
+				planetBefore.toString(),
+                "Planet owns token before"
+			).to.equal(
+				"0"
+			);
+            expect(
+				planetAfter.toString(),
+				"Planet does not own token after"
+			).to.equal(
+				"1"
+			);
         });
     });
 });
