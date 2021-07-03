@@ -1,28 +1,21 @@
 import React from 'react'
 import Button from '@components/Button/Button'
 import { ButtonSize, ButtonType } from '@components/Button/Button'
-import { useWallet } from 'use-wallet'
+import useEthers from 'hooks/useEthers'
 
 function ConnectWalletButton() {
-  const wallet = useWallet()
-
-  const connectWallet = async (e) => {
-    await wallet.connect()
-  }
-
-  const disconnectWallet = () => {
-    wallet.reset()
-  }
+  const { address, web3Modal, loadWeb3Modal, logoutOfWeb3Modal } = useEthers()
 
   const getShortenedAddress = () => {
-    return `${wallet.account.substring(0, 6)}...${wallet.account.slice(-4)}`
+    if (!address) return 'Connecting...'
+    return `${address.substring(0, 6)}...${address.slice(-4)}`
   }
 
-  const isConnected = wallet.status === 'connected'
+  const isConnected = web3Modal.cachedProvider
 
   return (
-    <Button size={ButtonSize.Large} buttonType={ButtonType.Primary} onClick={isConnected ? disconnectWallet : connectWallet}>
-      <div className='flex flex-row'>
+    <Button size={ButtonSize.Large} buttonType={ButtonType.Primary} onClick={isConnected ? logoutOfWeb3Modal : () => { loadWeb3Modal(web3Modal, logoutOfWeb3Modal) }}>
+      <div className='flex flex-row' style={{ minWidth: 168 }}>
         {isConnected && <div className='bg-no-repeat bg-center mr-4' style={{backgroundImage: 'url(/images/metamaskIcon.png)', width: 32, height: 32}}></div>}
         <span>
           {isConnected ? getShortenedAddress() : 'CONNECT WALLET'}

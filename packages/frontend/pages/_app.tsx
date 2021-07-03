@@ -1,20 +1,24 @@
 import '../styles/globals.css'
-import { TreasureProvider } from '../contexts/TreasureContext';
-import { UseWalletProvider } from 'use-wallet'
+import { TreasureProvider } from '../contexts/TreasureContext'
+import { EthersProvider } from '../contexts/EthersContext'
+
+function SafeHydrate({ children }) {
+  return (
+    <div suppressHydrationWarning>
+      {typeof window === 'undefined' ? null : children}
+    </div>
+  )
+}
 
 function MyApp({ Component, pageProps }) {
   return (
-    <UseWalletProvider
-      chainId={1}
-      connectors={{
-        // #TODO: insert dAppId
-        portis: { dAppId: 'my-dapp-id-123-xyz' },
-      }}
-    >
-      <TreasureProvider>
-        <Component {...pageProps} />
-      </TreasureProvider>
-    </UseWalletProvider>
+    <SafeHydrate>
+      <EthersProvider>
+        <TreasureProvider>
+          <Component {...pageProps} />
+        </TreasureProvider>
+      </EthersProvider>
+    </SafeHydrate>
   );
 }
 
