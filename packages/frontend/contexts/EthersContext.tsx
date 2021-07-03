@@ -3,8 +3,8 @@ import WalletLink from "walletlink"
 import React, { useCallback, useEffect, useState, createContext } from "react"
 import Web3Modal from "web3modal"
 import { INFURA_ID, NETWORKS } from "utils/constants"
-import useUserSigner from "hooks/useUserSigner";
-const { ethers } = require("ethers");
+import useUserSigner from "hooks/useUserSigner"
+const { ethers } = require("ethers")
 
 const initialEthersState = {
   address: null,
@@ -27,6 +27,8 @@ export const EthersProvider = ({ children }) => {
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
   const [localProvider, setLocalProvider] = useState(new ethers.providers.StaticJsonRpcProvider(localProviderUrl));
+  // when connecting to mainnet, use below
+  // const mainnetProvider = new ethers.providers.StaticJsonRpcProvider("https://mainnet.infura.io/v3/" + INFURA_ID);
 
   // Use your injected provider from 🦊 Metamask
   const userSigner = useUserSigner(injectedProvider);
