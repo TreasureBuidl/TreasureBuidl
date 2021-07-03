@@ -28,6 +28,8 @@ contract TokenOwnership is ModifiedErc721 {
     uint256 public tokenIDCounter_;
     // Token ID     => Owned contract
     mapping(uint256 => address) public ownedContracts_;
+    // Contract owner => Token ID
+    mapping(address => uint256) public contractOwners_;
 
     modifier onlyFactory() {
         require(
@@ -46,6 +48,15 @@ contract TokenOwnership is ModifiedErc721 {
 
     }
 
+    /**
+     * @param   _owner Address of the owner. 
+     * @return  address The address of the contract that the owner owns. 
+     */
+    function getOwnedContract(address _owner) external view returns(address) {
+        uint256 tokenID = contractOwners_[_owner];
+        return ownedContracts_[tokenID];
+    }
+
     function setFactory(address _factory) external {
         require(
             factory_ == address(0),
@@ -56,6 +67,12 @@ contract TokenOwnership is ModifiedErc721 {
         // the factory can transfer its minting rights.
     }
 
+    /**
+     * @param   _to Address receiving ownership token. 
+     * @notice  All storage for owner to owned contract is handled in the 
+     *          `_beforeTokenTransfer` function.
+     *          Only the factory can mint tokens.
+     */
     function mintOwnershipToken(
         address _to
     )
@@ -73,6 +90,11 @@ contract TokenOwnership is ModifiedErc721 {
         );
     }
 
+    /**
+     * @param   _tokenID ID of the minted token.
+     * @param   _ownedContract Address of the owned contract.
+     * @notice  Only the factory can link owner tokens to owned contracts. 
+     */
     function linkOwnershipToken(
         uint256 _tokenID,
         address _ownedContract
@@ -80,18 +102,28 @@ contract TokenOwnership is ModifiedErc721 {
         external
         onlyFactory()
     {
+        ModifiedOwnership owned = ModifiedOwnership(_ownedContract);
         require(
             ownedContracts_[_tokenID] == address(0),
             "Ownership has already been linked"
         );
         require(
-            ModifiedOwnership(_ownedContract).isOwned(),
+            owned.isOwned(),
             "Owned contract invalid"
         );
-
         ownedContracts_[_tokenID] = _ownedContract;
-    } 
+    }
 
+    /**
+     * @param   _from The address that the token is being moved from. If this is
+     *          the 0x0 address, the token is being minted. 
+     * @param   _to The address that the token is being moved to. If this is the
+     *          0x0 address, the token is being burnt. 
+     * @param   _tokenID The ID of the token. 
+     * @notice  This hook is called within the ModifiedErc721 on mint, burn and
+     *          all variations of transfer. Within this function the address of
+     *          the current owner is tracked. 
+     */
     function _beforeTokenTransfer(
         address _from,
         address _to,
@@ -106,12 +138,20 @@ contract TokenOwnership is ModifiedErc721 {
         if(_to == address(0)) {
             // If token is being burnt
             ownedContract.renounceOwnership();
+            contractOwners_[address(0)] = _tokenID;
+
+        } else if(_from == address(0)) {
+            // If token is being minted
+            contractOwners_[_to] = _tokenID;
+
         } else if(
             _from != address(0) &&
             _to != address(0)
         ) {
             // If token is being transferred
             ownedContract.transferOwnership(_to);
+            contractOwners_[_from] = 0;
+            contractOwners_[_to] = _tokenID;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "../treasure-maps/ModifiedErc721.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 
 /**
@@ -21,7 +21,7 @@ import "@openzeppelin/contracts/utils/Context.sol";
  */
 abstract contract ModifiedOwnership is Context {
     // Instance of the NFT token contract that represents ownership.
-    IERC721 internal ownerTokenInstance_;
+    ModifiedErc721 internal ownerTokenInstance_;
     // ID of the token that is the owner of contract.
     uint256 private ownerTokenID_;
 
@@ -35,7 +35,7 @@ abstract contract ModifiedOwnership is Context {
         uint256 _ownerTokenID
     ) internal {
         ownerTokenID_ = _ownerTokenID;
-        ownerTokenInstance_ = IERC721(ownerTokenInstance_);
+        ownerTokenInstance_ = ModifiedErc721(_ownerTokenInstance);
         address currentOwner = ownerTokenInstance_.ownerOf(ownerTokenID_);
         emit OwnershipTransferred(address(0), currentOwner);
     }

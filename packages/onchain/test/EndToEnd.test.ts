@@ -22,12 +22,37 @@ describe("End To End Test", () => {
     let not_planet_owner: any;
     let map_creator: any;
 
-    beforeEach(async () => {
+    function paramBuilder(
+        paramType: Array<string>,
+        params: Array<string>
+    ): String {
+        let encoded: String[] = new Array(params.length);
+
+        for (let i = 0; i < params.length; i++) {
+            encoded[i] = web3.eth.abi.encodeParameter(paramType[i], params[i]);
+        }
+
+        // Starts with 0x as first param needs to start with 0x.
+        let concatEncoded: String = new String("0x");
+
+        for (let i = 0; i < params.length; i++) {
+            let fullEncoded: String = encoded[i];
+            // Slices of the 0x
+            fullEncoded = fullEncoded.slice(2);
+            // Adds it to the string
+            concatEncoded = concatEncoded.concat(fullEncoded.toString());
+        }
+
+        return concatEncoded;
+    }
+
+    before(async () => {
         // Getting all the contracts
         // const TransactionLibrary = await ethers.getContractFactory("TransactionLibrary");
         const TokenOwnership = await ethers.getContractFactory("TokenOwnership");
         const TreasureMaps = await ethers.getContractFactory("TreasureMaps");
         const PlanetFactory = await ethers.getContractFactory("PlanetFactory");
+        const TreasurePlanet = await ethers.getContractFactory("TreasurePlanet");
         const TokenOne = await ethers.getContractFactory("Erc20_Token");
         const TokenTwo = await ethers.getContractFactory("Erc20_Token");
 
@@ -48,17 +73,90 @@ describe("End To End Test", () => {
             tokenOwnership.address,
             treasureMaps.address
         );
+        await tokenOwnership.setFactory(planetFactory.address);
         testTokenOne = await TokenOne.deploy("Token One", "TKN1");
         testTokenTwo = await TokenTwo.deploy("Token Two", "TKN2");
     });
 
-    describe("Deploying a treasure planet", () => {
-        it.only("Nominal deployment", async () => {
+    describe("Treasure planet life cycle", () => {
+        before(async () => {
+            const TreasurePlanet = await ethers.getContractFactory("TreasurePlanet");
+
             let tx = await (
                 await planetFactory.connect(planet_owner).createTreasurePlanet()
             ).wait();
 
-            console.log(tx.events)
+            treasurePlanet = TreasurePlanet.attach(tx.events[2].args.planet);
+        });
+
+        it("Creating a treasure map", async () => {
+            await testTokenOne.connect(map_creator).mint(
+                treasurePlanet.address,
+                4000
+            );
+
+            await testTokenOne.connect(map_creator).approve(
+                treasurePlanet.address,
+                4000
+            );
+
+            let tx = await (
+                await treasureMaps.connect(map_creator).createTreasure(
+                    "Example test treasure",
+                    [
+                        // testTokenOne.address,
+                        testTokenOne.address,
+                        testTokenOne.address,
+                        testTokenOne.address
+                    ],
+                    [
+                        // "transferFrom(address,address,uint256)",
+                        "mint(address,uint256)",
+                        "transfer(address,uint256)",
+                        "transfer(address,uint256)"
+                    ],
+                    [
+                        // paramBuilder(
+                        //     ["address", "address", "uint256"],
+                        //     [
+                        //         map_creator.address.toString(),
+                        //         treasurePlanet.address.toString(),
+                        //         "4000"
+                        //     ]
+                        // ),
+                        paramBuilder(
+                            ["address", "uint256"],
+                            [treasurePlanet.address.toString(), "4000"]
+                        ),
+                        paramBuilder(
+                            ["address", "uint256"],
+                            [not_planet_owner.address.toString(), "1000"]
+                        ),
+                        paramBuilder(
+                            ["address", "uint256"],
+                            [planet_owner.address.toString(), "1000"]
+                        )
+                    ],
+                    [
+                        // 0,
+                        0,
+                        0,
+                        0
+                    ]
+                )
+            ).wait();
+        });
+
+        it("Executing a treasure map", async () => {
+            let treasureMapOne = await treasureMaps.getTreasureMap(1);
+
+            console.log(treasureMapOne)
+
+            let tx = await (await 
+                treasurePlanet.connect(planet_owner).execute(1)
+            ).wait();
+
+            console.log(tx)
         });
     });
 });

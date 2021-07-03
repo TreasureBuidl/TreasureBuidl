@@ -66,14 +66,14 @@ contract TreasureMaps is ModifiedErc721 {
 
     }
 
-    function getCoordinates(uint256 _ID) public view returns(
+    function getTreasureMap(uint256 _id) public view returns(
         address[] memory callTargets,
         uint256[] memory callValues,
         bytes[] memory callData
     ) {
-        callTargets = treasureMaps_[_ID].callTargets;
-        callValues = treasureMaps_[_ID].callValues;
-        callData = treasureMaps_[_ID].callData;
+        callTargets = treasureMaps_[_id].callTargets;
+        callValues = treasureMaps_[_id].callValues;
+        callData = treasureMaps_[_id].callData;
     }
 
     /**

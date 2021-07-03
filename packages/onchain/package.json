@@ -10,8 +10,8 @@
     "build": "hardhat compile",
     "test": "hardhat test",
     "cover": "hardhat coverage",
-    "local": "hardhat node",
-    "deploy:local": "hardhat run scripts/sample-script.js --network localhost",
+    "start": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
     "clean": "rm -rf artifacts && rm -rf cache && rm -rf docs/gen-docs && coverage.json && coverage",
     "deep-clean": "yarn clean && rm -rf node_modules && yarn.lock"
   },

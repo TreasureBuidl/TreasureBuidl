@@ -46,6 +46,7 @@ contract TreasurePlanet is ModifiedOwnership, IERC721Receiver, IERC1155Receiver 
             _ownerTokenInstance,
             _ownerTokenID
         )
+        public
     {
         maps_ = TreasureMaps(_treasureMaps);
     }
@@ -65,7 +66,7 @@ contract TreasurePlanet is ModifiedOwnership, IERC721Receiver, IERC1155Receiver 
             address[] memory callTargets,
             uint256[] memory callValues,
             bytes[] memory callData
-        ) = maps_.getCoordinates(_mapToken);
+        ) = maps_.getTreasureMap(_mapToken);
         
         require(
             callTargets.length != 0,

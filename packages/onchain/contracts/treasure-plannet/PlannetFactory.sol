@@ -26,21 +26,21 @@ contract PlanetFactory {
     function createTreasurePlanet() external {
         uint256 tokenID = tokenOwnership_.mintOwnershipToken(msg.sender);
 
-        address treasurePlanet = address(new TreasurePlanet(
+        TreasurePlanet treasurePlanet = new TreasurePlanet(
             treasureMaps_,
             address(tokenOwnership_),
             tokenID
-        ));
+        );
 
         tokenOwnership_.linkOwnershipToken(
             tokenID,
-            treasurePlanet
+            address(treasurePlanet)
         );
 
         emit TreasurePlanetCreated(
             msg.sender,
             tokenID,
-            treasurePlanet
+            address(treasurePlanet)
         );
     }
 }
