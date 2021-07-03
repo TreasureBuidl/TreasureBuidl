@@ -47,4 +47,7 @@ export type Action = {
   type: ActionType
   input?: Amount
   output?: Amount
+  iconUrl: string
+  cardUrl: string
+  cssClass: string
 }
