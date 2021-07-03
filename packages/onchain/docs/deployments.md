@@ -4,9 +4,7 @@
 
 | Label | Info |
 |:--|:---|
-| Deploying Address | 0xdfB1be5E59375f3e627FB892aAf8fa7312035cD7
-| Deployer ETH Balance | 3685727850229462024
-| Deployed Token Ownership | 0x265e9BD55217a980D1a8CA57Ab5e01638804aB2F
-| Deployed Treasure Maps | 0x18D07Ca4DBe86fa00A0dF8Bd09E9b9811223B222
-| Deployed Planet Factory | 0xdB2B831fdde0156565E0B31E6ed5eEad2D72F4C3
-| Deployed Test Token | 0x0c16eDe7571569abE4b68ec452333924E87D3798
+| Deployed Token Ownership | 0xF338a01e28C37dcfe7E68b3495EcB1010620446b
+| Deployed Treasure Maps | 0xdD898897406b0f31D40F76E0aaF2DC8400555678
+| Deployed Planet Factory | 0x4b256CF68Dbf692ef9426B79db21361A7FF15d9B
+| Deployed Test Token | 0x36d3BE9a20a6D30d715F49bbA709366a937652F2
