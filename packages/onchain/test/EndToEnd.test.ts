@@ -139,8 +139,8 @@ describe("End To End Test", () => {
                 treasureMaps.connect(map_creator).createTreasure(
                     "Example test treasure",
                     [
-                        testTokenOne.address,
-                        testTokenOne.address
+                        testTokenOne.address.toString(),
+                        testTokenOne.address.toString()
                     ],
                     [
                         "mint(address,uint256)",
@@ -170,9 +170,25 @@ describe("End To End Test", () => {
             ).to.be.revertedWith(
                 "MAP: Array lengths differ"
             );
+
+            let first = await paramBuilder(
+                ["address", "address", "uint256"],
+                ["0x90F79bf6EB2c4f870365E785982E1f101E93b906", "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65", "5000"]
+            );
+            console.log(first);
+            first = await paramBuilder(
+                ["address", "address", "uint256", "uint256"],
+                ["0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9", "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", "5000", "254"]
+            );
+            console.log(first);
+            first = await paramBuilder(
+                ["address", "uint256"],
+                ["0x90F79bf6EB2c4f870365E785982E1f101E93b906", "10"]
+            );
+            console.log(first);
         });
 
-        it("Executing a treasure map", async () => {
+        it("Executing a treasure map", async () => { 
             let treasureMapOne = await treasureMaps.getTreasureMap(1);
 
             let tx = await (await 
