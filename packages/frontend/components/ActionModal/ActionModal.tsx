@@ -22,8 +22,8 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
 
   useEffect(() => {
     let actions = [];
-    for (let protocol of libraries) {
-      for (let i = 0; i < protocol.functionSig.length; i++) {
+    libraries.forEach((protocol) => {
+      protocol.functionSig.forEach((_, i) => {
         let action = {
           id: uuidv4(),
           type: {
@@ -47,8 +47,8 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
           }
         }
         actions.push(action);
-      }
-    }
+      });
+    });
     setActions(actions);
   }, [])
 
