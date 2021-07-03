@@ -6,3 +6,7 @@ yarn-error.log
 # Hardhat Specific 
 cache
 artifacts
+
+# Coverage
+coverage 
+coverage.json
