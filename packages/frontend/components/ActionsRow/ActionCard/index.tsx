@@ -68,12 +68,12 @@ function ActionCard({ action }: { action: Action }) {
   return (
     <div className="flex flex-col">
       <div className="pr-14 pb-2 self-center">
-        <ProtocolIcon protocol={action.type.protocol} />
+        <ProtocolIcon url={action.iconUrl} />
       </div>
       <div
         className="-ml-5 bg-no-repeat bg-center"
         style={{
-          backgroundImage: getBackground(action.type.protocol),
+          backgroundImage: action.cardUrl || 'url(/images/cards/defaultCard.png)',
           width: 315,
           height: 373,
         }}
@@ -81,12 +81,7 @@ function ActionCard({ action }: { action: Action }) {
         <div
           className={classnames(
             'ml-4 mt-4 font-bold text-white text-center py-2 px-4 rounded-lg text-sm',
-            {
-              'bg-aave': action.type.protocol === Protocol.Aave,
-              'bg-compound': action.type.protocol === Protocol.Compound,
-              'bg-purple': action.type.protocol === Protocol.TreasureBuidl,
-              'bg-uniswap': action.type.protocol === Protocol.Uniswap,
-            }
+            action.cssClass
           )}
           style={{ width: 244 }}
         >
@@ -109,12 +104,7 @@ function ActionCard({ action }: { action: Action }) {
               <div style={{ height: inputBoxHeight }}></div>
             )}
             <div
-              className={classnames('ml-11', {
-                'bg-aave': action.type.protocol === Protocol.Aave,
-                'bg-compound': action.type.protocol === Protocol.Compound,
-                'bg-purple': action.type.protocol === Protocol.TreasureBuidl,
-                'bg-uniswap': action.type.protocol === Protocol.Uniswap,
-              })}
+              className={classnames('ml-11', action.cssClass)}
               style={{ width: 214, height: 2 }}
             ></div>
             {action.output ? (

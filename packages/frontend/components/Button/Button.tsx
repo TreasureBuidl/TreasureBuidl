@@ -19,7 +19,7 @@ export enum ButtonSize {
 
 type ButtonProps = {
   size: ButtonSize
-  buttonType: ButtonType | Protocol
+  protocolCssClass: string
   buttonShape?: ButtonShape
   onClick?: (any) => any
   children: any
@@ -27,7 +27,7 @@ type ButtonProps = {
 
 function Button({
   size,
-  buttonType,
+  protocolCssClass,
   buttonShape = ButtonShape.Regular,
   onClick,
   children,
@@ -41,16 +41,7 @@ function Button({
         'text-xs font-bold': size === ButtonSize.Small,
         'text-xl': size === ButtonSize.Large,
         'text-4xl': size === ButtonSize.ExtraLarge,
-        'bg-purple hover:bg-purple-dark active:bg-purple-darker':
-          buttonType === ButtonType.Primary ||
-          buttonType === Protocol.TreasureBuidl,
-        'bg-aave hover:bg-aave-dark active:bg-aave-darker':
-          buttonType === Protocol.Aave,
-        'bg-compound hover:bg-compound-dark active:bg-compound-darker':
-          buttonType === Protocol.Compound,
-        'bg-uniswap hover:bg-uniswap-dark active:bg-uniswap-darker':
-          buttonType === Protocol.Uniswap,
-      })}
+      }, protocolCssClass === ButtonType.Primary ? 'bg-purple hover:bg-purple-dark active:bg-purple-darker' : `${protocolCssClass} hover:${protocolCssClass}-dark active:${protocolCssClass}-darker`)}
     >
       {children}
     </button>

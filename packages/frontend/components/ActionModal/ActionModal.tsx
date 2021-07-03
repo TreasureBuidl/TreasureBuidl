@@ -15,10 +15,6 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
   const [actions, setActions] = useState([])
   const { addAction } = useTreasure()
 
-  const protocols = Array.from(
-    new Set(actions.map((actions: Action) => actions.type.protocol))
-  )
-
   const handleActionSelection = (action: Action) => {
     addAction(action)
     toggleActionModal(false)
@@ -33,7 +29,10 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
           type: {
             protocol: protocol.protocol,
             operation: protocol.operations[i],
-          }
+          },
+          iconUrl: protocol.iconUrl,
+          cardUrl: protocol.cardUrl,
+          cssClass: protocol.cssClass,
         };
         if (protocol.hasInput[i]) {
           action["input"] = {
@@ -70,20 +69,20 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
           </div>
         </div>
         <div>
-          {protocols.map((protocol) => (
-            <div key={protocol}>
+          {libraries.map((library, i) => (
+            <div key={i}>
               <div className="flex flex-row mb-4 items-center">
-                <ProtocolIcon protocol={protocol} />
-                <div className="uppercase text-xl ml-4">{protocol}</div>
+                <ProtocolIcon url={library.iconUrl} />
+                <div className="uppercase text-xl ml-4">{library.protocol}</div>
               </div>
               <div className="flex flex-row justify-start mb-10">
                 {actions
-                  .filter((action) => action.type.protocol === protocol)
+                  .filter((action) => action.type.protocol === library.protocol)
                   .map((action) => (
                     <div key={action.id} className="mr-10">
                       <Button
                         size={ButtonSize.Small}
-                        buttonType={action.type.protocol}
+                        protocolCssClass={action.cssClass}
                         buttonShape={ButtonShape.Wide}
                         onClick={() => handleActionSelection(action)}
                       >

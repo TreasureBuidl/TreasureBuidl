@@ -7,9 +7,18 @@ type Network = {
   contractAddress: string;
 }
 
-class ProjectLibrary {
+export class ProjectLibrary {
   // The name of the protocol
   protocol: Protocol;
+
+  // Icon URL
+  iconUrl: string;
+
+  // URL of the card image
+  cardUrl: string;
+
+  // class name for tailwind. tailwind should define a {cssClass}-dark and {cssClass}-darker
+  cssClass: string;
 
   // The available networks that this protocol is deployed on and the relevant contract addresses
   networks: Network[];
@@ -47,6 +56,9 @@ class ProjectLibrary {
 class UniswapV2Library extends ProjectLibrary {
   constructor() {
     super();
+    this.iconUrl = 'url(/images/protocolIcons/uniswapIcon.png)';
+    this.cardUrl = 'url(/images/cards/uniswapCard.png)';
+    this.cssClass = 'bg-uniswap';
     this.protocol = Protocol.Uniswap;
     this.networks = [
       {
@@ -89,6 +101,9 @@ class UniswapV2Library extends ProjectLibrary {
 class AaveLibrary extends ProjectLibrary {
   constructor() {
     super();
+    this.iconUrl = 'url(/images/protocolIcons/aaveIcon.png)';
+    this.cardUrl = 'url(/images/cards/aaveCard.png)';
+    this.cssClass = 'bg-aave';
     this.protocol = Protocol.Aave;
     this.networks = [
       {
@@ -131,6 +146,9 @@ class CompoundLibrary extends ProjectLibrary {
 
   constructor() {
     super();
+    this.iconUrl = 'url(/images/protocolIcons/compoundIcon.png)';
+    this.cardUrl = 'url(/images/cards/compoundCard.png)';
+    this.cssClass = 'bg-compound';
     this.protocol = Protocol.Compound;
     this.networks = [
       {

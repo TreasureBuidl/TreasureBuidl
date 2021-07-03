@@ -31,7 +31,7 @@ export default function Home() {
           <div className="mt-14">
             <Button
               size={ButtonSize.ExtraLarge}
-              buttonType={ButtonType.Primary}
+              protocolCssClass={ButtonType.Primary}
               buttonShape={ButtonShape.Circular}
               onClick={() => setActionModalState(true)}
             >
