@@ -8,6 +8,21 @@
 
 ---
 
+# Index 
+
+* #### [Repo set up](#repo-set-up)
+    * [Compile](#compile)
+    * [Test](#test)
+    * [Coverage](#coverage)
+    * [Deploy](#deploy)
+        * [Local](#local)
+        * [Rinkeby](#rinkeby)
+
+#### [> Encoding guide](./docs/encoding.md)
+#### [> Deployments](./docs/deployments.md)
+
+---
+
 # Repo set up 
 
 This repository uses yarn. 
@@ -67,19 +82,10 @@ yarn deploy:local
 
 #### Rinkeby
 
-To deploy on Rinkeby you will first need to make a `.env` file, and add an infura key as well as a private key for a rinkeby address that has rinkeby eth. 
+You can copy the `.env.example` and then rename it `.env`, and add an infura key as well as a private key for a rinkeby address that has rinkeby eth. 
 
-You can copy the `.env
+Then run:
 
 ```
 yarn deploy:rinkeby
-```
-
-
-```
-yarn test
-```
-
-```
-yarn test
 ```
