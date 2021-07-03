@@ -50,6 +50,10 @@ contract TokenOwnership is ModifiedErc721 {
         return ownedContracts_[tokenID];
     }
 
+    function getOwnerToken(address _owner) external view returns(uint256) {
+        return contractOwners_[_owner];
+    }
+
     /**
      * @param   _factory Address of the factory contract. 
      * @notice  The set factory address will be the only address able to mint
@@ -84,6 +88,8 @@ contract TokenOwnership is ModifiedErc721 {
         tokenIDCounter_ += 1;
         tokenID = tokenIDCounter_;
 
+        // FUTURE this is just here to make it easier for the front end, you 
+        // should be able to own more than one planet for sure. 
         require(
             contractOwners_[_to] == 0,
             "Owner has token"

@@ -151,7 +151,7 @@ contract TreasureMaps is ModifiedErc721 {
     }
 
     function _addTreasureMap(
-         address _creator,
+        address _creator,
         address[] calldata _callTargets,
         string[] calldata _functionSigs,
         bytes[] calldata _callData,
@@ -160,8 +160,6 @@ contract TreasureMaps is ModifiedErc721 {
         internal
         returns(uint256 tokenID)
     {
-        require(_creator != address(0), "Map does not exist");
-
         require(
             _callTargets.length == _functionSigs.length &&
             _callData.length == _functionSigs.length && 
