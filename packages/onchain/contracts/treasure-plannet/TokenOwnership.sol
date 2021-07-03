@@ -83,6 +83,11 @@ contract TokenOwnership is ModifiedErc721 {
         tokenIDCounter_ += 1;
         tokenID = tokenIDCounter_;
 
+        require(
+            contractOwners_[_to] == 0,
+            "Owner has token"
+        );
+
         _mint(
             OWNER_TOKEN,
             _to,
