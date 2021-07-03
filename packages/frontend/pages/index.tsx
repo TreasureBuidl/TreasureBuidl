@@ -9,9 +9,12 @@ import Button, {
 import React from 'react'
 import ActionModal from '@components/ActionModal/ActionModal'
 import { useState } from 'react'
+import TreasureModal from '@components/TrasureModal/TreasureModal'
+import useTreasureModal from 'hooks/useTreasureModal'
 
 export default function Home() {
   const [actionModalState, setActionModalState] = useState(false)
+  const { isShowing, toggle } = useTreasureModal()
 
   return (
     <div className="bg-darkBlue h-screen w-screen">
@@ -20,13 +23,17 @@ export default function Home() {
       ) : (
         ''
       )}
+      {isShowing ? <TreasureModal toggle={toggle} /> : ''}
+
       <NavBar />
       <div className="flex justify-center mt-12">
         <FromToTreasure />
       </div>
       <div className="flex flex-row justify-center mt-24">
-        <div className="flex flex-row w-5/6 items-center scrollbar scrollbar-thumb-offWhite scrollbar-track-darkerBlue pb-12"
-          style={{ height: 501 }}>
+        <div
+          className="flex flex-row w-5/6 items-center scrollbar scrollbar-thumb-offWhite scrollbar-track-darkerBlue pb-12"
+          style={{ height: 501 }}
+        >
           <ActionsRow />
           <div className="mt-14">
             <Button
