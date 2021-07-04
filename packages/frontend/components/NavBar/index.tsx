@@ -1,6 +1,6 @@
 import React from 'react'
 import ConnectWalletButton from '@components/NavBar/ConnectWalletButton'
-import TreasureButton from './TreasureButton/indext'
+import TreasureButton from './TreasureButton'
 import useEthers from 'hooks/useEthers'
 
 function NavBar() {
