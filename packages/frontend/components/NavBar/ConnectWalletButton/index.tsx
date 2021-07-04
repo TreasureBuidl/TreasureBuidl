@@ -14,12 +14,29 @@ function ConnectWalletButton() {
   const isConnected = web3Modal.cachedProvider
 
   return (
-    <Button size={ButtonSize.Large} protocolCssClass={ButtonType.Primary} onClick={isConnected ? logoutOfWeb3Modal : () => { loadWeb3Modal(web3Modal, logoutOfWeb3Modal) }}>
-      <div className='flex flex-row' style={{ minWidth: 168 }}>
-        {isConnected && <div className='bg-no-repeat bg-center mr-4' style={{backgroundImage: 'url(/images/metamaskIcon.png)', width: 32, height: 32}}></div>}
-        <span>
-          {isConnected ? getShortenedAddress() : 'CONNECT WALLET'}
-        </span>
+    <Button
+      size={ButtonSize.Large}
+      protocolCssClass={ButtonType.Primary}
+      onClick={
+        isConnected
+          ? logoutOfWeb3Modal
+          : () => {
+              loadWeb3Modal(web3Modal, logoutOfWeb3Modal)
+            }
+      }
+    >
+      <div className="flex flex-row" style={{ minWidth: 168 }}>
+        {isConnected && (
+          <div
+            className="bg-no-repeat bg-center mr-4"
+            style={{
+              backgroundImage: 'url(/images/icons/metamaskIcon.png)',
+              width: 32,
+              height: 32,
+            }}
+          ></div>
+        )}
+        <span>{isConnected ? getShortenedAddress() : 'CONNECT WALLET'}</span>
       </div>
     </Button>
   )

@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import { TreasureProvider } from '../contexts/TreasureContext'
 import { EthersProvider } from '../contexts/EthersContext'
+import { TreasureModalProvider } from '../contexts/TreasureModalContext'
 
 function SafeHydrate({ children }) {
   return (
@@ -15,11 +16,13 @@ function MyApp({ Component, pageProps }) {
     <SafeHydrate>
       <EthersProvider>
         <TreasureProvider>
-          <Component {...pageProps} />
+          <TreasureModalProvider>
+            <Component {...pageProps} />
+          </TreasureModalProvider>
         </TreasureProvider>
       </EthersProvider>
     </SafeHydrate>
-  );
+  )
 }
 
 export default MyApp
