@@ -185,4 +185,21 @@ class CompoundLibrary extends ProjectLibrary {
   }
 }
 
-export const libraries: ProjectLibrary[] = [new UniswapV2Library(), new AaveLibrary(), new CompoundLibrary()];
+class BalancerLibrary extends ProjectLibrary {
+  constructor() {
+    super();
+    this.iconUrl = 'url(/images/protocolIcons/balancerIcon.png)';
+    this.cardUrl = 'url(/images/cards/balancerCard.png)';
+    this.cssClass = 'bg-balancer';
+    this.protocol = Protocol.Balancer;
+    this.networks = []
+    this.functionSig = ["swap(SingleSwap,FundManagement,uint256,uint256)"];
+    this.fullFunctionSig = ["swap(SingleSwap request,FundManagement funds,uint256 limit,uint256 deadline) external returns (uint256 assetDelta)"];
+    this.description = ["The vault supports single swaps, a way to perform exactly one trade directly and gas-efficiently with a particular pool (e.g., for token sale GUIs). You can still use the internal balance."];
+    this.operations = [Operation.swap];
+    this.hasInput = [true];
+    this.hasOutput = [true];
+  }
+}
+
+export const libraries: ProjectLibrary[] = [new UniswapV2Library(), new AaveLibrary(), new CompoundLibrary(), new BalancerLibrary()];
