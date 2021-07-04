@@ -25,7 +25,7 @@ function ConnectWalletButton() {
             }
       }
     >
-      <div className="flex flex-row" style={{ minWidth: 168 }}>
+      <div className="flex flex-row items-center" style={{ minWidth: 168 }}>
         {isConnected && (
           <div
             className="bg-no-repeat bg-center mr-4"

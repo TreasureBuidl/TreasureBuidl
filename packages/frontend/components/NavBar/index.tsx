@@ -23,7 +23,7 @@ function NavBar() {
         </p>
       </div>
       <div className="flex flex-row space-x-4" style={{ height: 54 }}>
-        {isConnected ? <TreasureButton /> : ''}
+        {isConnected && <TreasureButton />}
         <ConnectWalletButton />
       </div>
     </div>

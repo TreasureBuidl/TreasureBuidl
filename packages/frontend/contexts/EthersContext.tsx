@@ -3,20 +3,27 @@ import WalletLink from "walletlink"
 import React, { useCallback, useEffect, useState, createContext } from "react"
 import Web3Modal from "web3modal"
 import { INFURA_ID, NETWORKS } from "utils/constants"
-import useUserSigner from "hooks/useUserSigner";
-const { ethers } = require("ethers");
+import useUserSigner from "hooks/useUserSigner"
+import useContractLoader from "hooks/useContractLoader"
+import useGasPrice from "hooks/useGasPrice"
+import Transactor from "helpers/Transactor"
+const { ethers } = require("ethers")
 
 const initialEthersState = {
   address: null,
   injectedProvider: null,
   localProvider: null,
   web3Modal: null,
+  tx: null,
+  writeContracts: null,
+  treasureAddress: null,
 };
 
 const EthersContext = createContext({
   ...initialEthersState,
   loadWeb3Modal: (web3Modal, logoutOfWeb3Modal) => {},
   logoutOfWeb3Modal: () => {},
+  loadTreasureAddress: (writeContracts, userAddress, tx) => {},
 });
 
 export const EthersProvider = ({ children }) => {
@@ -26,20 +33,41 @@ export const EthersProvider = ({ children }) => {
   const localProviderUrl = targetNetwork.rpcUrl;
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
+  const [treasureAddress, setTreasureAddress] = useState();
   const [localProvider, setLocalProvider] = useState(new ethers.providers.StaticJsonRpcProvider(localProviderUrl));
+  // when connecting to mainnet, use below
+  // const mainnetProvider = new ethers.providers.StaticJsonRpcProvider("https://mainnet.infura.io/v3/" + INFURA_ID);
 
   // Use your injected provider from 🦊 Metamask
   const userSigner = useUserSigner(injectedProvider);
+  /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
+  const gasPrice = useGasPrice(targetNetwork, "fast");
+  // The transactor wraps transactions and provides notificiations
+  const tx = Transactor(userSigner, gasPrice);
+
+  // If you want to make 🔐 write transactions to your contracts, use the userSigner:
+  const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
+  const writeContracts = useContractLoader(userSigner, { chainId: localChainId });
+
+  const loadTreasureAddress = useCallback(async (writeContracts, userAddress, tx) => {
+    if (writeContracts) {
+      const result = await tx(writeContracts.TokenOwnership?.getOwnedContract(userAddress), null);
+      if (parseInt(result ?? '0')) setTreasureAddress(result)
+    }
+  }, [setTreasureAddress])
 
   useEffect(() => {
     async function getAddress() {
       if (userSigner) {
         const newAddress = await userSigner.getAddress();
         setAddress(newAddress);
+
+        // get owned treasure
+        loadTreasureAddress(writeContracts, newAddress, tx)
       }
     }
     getAddress();
-  }, [userSigner]);
+  }, [userSigner, writeContracts]);
 
   // Coinbase walletLink init
   const walletLink = new WalletLink({
@@ -123,8 +151,12 @@ export const EthersProvider = ({ children }) => {
         injectedProvider,
         localProvider,
         web3Modal,
+        tx,
+        writeContracts,
+        treasureAddress,
         loadWeb3Modal,
         logoutOfWeb3Modal,
+        loadTreasureAddress,
       }}
     >
       {children}
