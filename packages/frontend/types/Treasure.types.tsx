@@ -3,6 +3,7 @@ export enum Protocol {
   Compound = 'Compound',
   TreasureBuidl = 'Treasure Buidl',
   Uniswap = 'Uniswap V2',
+  Balancer = 'Balancer V1',
 }
 
 // #TODO: not all of them, just the ones from the designs

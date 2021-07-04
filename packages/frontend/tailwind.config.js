@@ -28,6 +28,11 @@ module.exports = {
         dark: '#068b64',
         darker: '#01583f',
       },
+      balancer: {
+        DEFAULT: '#1f1e1f',
+        dark: '#191919',
+        darker: '#111011',
+      },
     },
     fontFamily: {
       body: ['Open Sans'],
