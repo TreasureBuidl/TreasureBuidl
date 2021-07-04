@@ -11,6 +11,7 @@ type ActionModalProps = {
   toggleActionModal: (state: boolean) => void
 }
 
+
 export default function ActionModal({ toggleActionModal }: ActionModalProps) {
   const [actions, setActions] = useState([])
   const { addAction } = useTreasure()
@@ -20,10 +21,34 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
     toggleActionModal(false)
   }
 
+  const paramTypesFromSig = (sig: string) => {
+    let params = sig.split("(")[1]
+    params = params.slice(0, params.length - 1);
+    return params.split(",");
+  }
+
+  const paramNamesFromFullSig = (sig: string) => {
+    let p = sig.split("(")[1];
+    p = p.split(")")[0];
+    let params = p.split(",");
+    let paramNames = params.map((x) => {
+      let split = x.split(" ");
+      return split[split.length - 1];
+    });
+    return paramNames;
+  }
+
   useEffect(() => {
     let actions = [];
     libraries.forEach((protocol) => {
       protocol.functionSig.forEach((_, i) => {
+
+        // calculate parameter types from a function signature
+        const paramTypes = paramTypesFromSig(protocol.functionSig[i]);
+
+        // get paramater names from a full function signature
+        const paramNames = paramNamesFromFullSig(protocol.fullFunctionSig[i]);
+
         let action = {
           id: uuidv4(),
           type: {
@@ -33,10 +58,17 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
           iconUrl: protocol.iconUrl,
           cardUrl: protocol.cardUrl,
           cssClass: protocol.cssClass,
+          contracts: {
+            address: protocol.getContractAddress(4), // TODO this is hardcoding rinkeby network, this should be changed if deploying to main
+            functionSig: protocol.functionSig[i],
+            paramTypes: paramTypes,
+            paramNames: paramNames,
+            paramToolTips: protocol.paramToolTip[i],
+          }
         };
         if (protocol.hasInput[i]) {
           action["input"] = {
-            token: Token.USDT,
+            token: Token.USDT, // TODO more thought should be put into determining input and output tokens
             quantity: null,
           }
         }
