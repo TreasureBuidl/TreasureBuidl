@@ -8,20 +8,6 @@ import classnames from 'classnames'
 function ActionCard({ action }: { action: Action }) {
   const { updateAction } = useTreasure()
 
-  const getBackground = (protocol: Protocol): string => {
-    // #TODO: Add the rest of the protocol images
-    switch (protocol) {
-      case Protocol.Aave:
-        return 'url(/images/cards/aaveCard.png)'
-      case Protocol.Compound:
-        return 'url(/images/cards/compoundCard.png)'
-      case Protocol.Uniswap:
-        return 'url(/images/cards/uniswapCard.png)'
-      default:
-        return 'url(/images/cards/defaultCard.png)'
-    }
-  }
-
   const handleInputQuantityChange = (event) => {
     updateAction({
       ...action,
