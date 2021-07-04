@@ -5,10 +5,11 @@ import React, {
 import lodashClonedeep from 'lodash.clonedeep';
 import { Action, Amount, Token } from 'types/Treasure.types';
 
-const initialTreasureState: { actions: Action[], fromTreasureAmounts: Amount[], toTreasureAmounts: Amount[] } = {
+const initialTreasureState: { actions: Action[], fromTreasureAmounts: Amount[], toTreasureAmounts: Amount[], actualTreasureAmounts: Amount[] } = {
   actions: [],
   fromTreasureAmounts: [],
   toTreasureAmounts: [],
+  actualTreasureAmounts: [],
 };
 
 export type TreasureAmounts = {
