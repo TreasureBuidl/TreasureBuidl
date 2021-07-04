@@ -52,7 +52,7 @@ export const EthersProvider = ({ children }) => {
   const loadTreasureAddress = useCallback(async (writeContracts, userAddress, tx) => {
     if (writeContracts) {
       const result = await tx(writeContracts.TokenOwnership?.getOwnedContract(userAddress), null);
-      if (result) setTreasureAddress(result)
+      if (parseInt(result ?? '0')) setTreasureAddress(result)
     }
   }, [setTreasureAddress])
 
