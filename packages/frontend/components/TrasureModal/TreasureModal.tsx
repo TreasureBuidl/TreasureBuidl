@@ -8,11 +8,11 @@ import Button, {
   ButtonType,
 } from '@components/Button/Button'
 import React from 'react'
-import TokenIcon from '@components/TokenIcon'
 import useTreasure from 'hooks/useTreasure'
+import TokenAmountRow from '@components/TokenAmountRow'
 
 export default function TreasureModal({ toggle }) {
-  const treasure = useTreasure()
+  const { fromTreasureAmounts } = useTreasure()
 
   return (
     <div className="bg-black bg-opacity-75 h-screen w-screen text-white flex justify-center items-center fixed z-10">
@@ -36,12 +36,20 @@ export default function TreasureModal({ toggle }) {
           <div className="bg-darkerBlue p-16 text-white flex flex-col justify-center items-center  border-white border-2 mb-10 mx-28">
             <div className="flex flex-row  mb-4 items-center justify-center">
               <div className="mr-16 flex flex-row items-center">
-                <div className="mr-4">
-                  <TokenIcon token={Token.aUSDC} />
-                </div>
-                <div>aUSDC</div>
+                {fromTreasureAmounts.length ? (
+                  <div className="flex flex-col mb-4">
+                    {fromTreasureAmounts.map((amount) => {
+                      return (
+                        <div className="mt-2">
+                          <TokenAmountRow key={amount.token} amount={amount} />
+                        </div>
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-white text-lg text-center mt-2">N/A</div>
+                )}
               </div>
-              <div>999.98</div>
             </div>
           </div>
           <div className="flex flex-row justify-center space-x-4">
