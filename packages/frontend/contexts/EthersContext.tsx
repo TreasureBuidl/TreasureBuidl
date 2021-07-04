@@ -4,6 +4,8 @@ import React, { useCallback, useEffect, useState, createContext } from "react"
 import Web3Modal from "web3modal"
 import { INFURA_ID, NETWORKS } from "utils/constants"
 import useUserSigner from "hooks/useUserSigner"
+import useContractLoader from "hooks/useContractLoader"
+import useGasPrice from "hooks/useGasPrice"
 const { ethers } = require("ethers")
 
 const initialEthersState = {
@@ -29,6 +31,11 @@ export const EthersProvider = ({ children }) => {
   const [localProvider, setLocalProvider] = useState(new ethers.providers.StaticJsonRpcProvider(localProviderUrl));
   // when connecting to mainnet, use below
   // const mainnetProvider = new ethers.providers.StaticJsonRpcProvider("https://mainnet.infura.io/v3/" + INFURA_ID);
+
+  /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
+  const gasPrice = useGasPrice(targetNetwork, "fast");
+
+  const localContracts = useContractLoader(localProvider, {});
 
   // Use your injected provider from 🦊 Metamask
   const userSigner = useUserSigner(injectedProvider);

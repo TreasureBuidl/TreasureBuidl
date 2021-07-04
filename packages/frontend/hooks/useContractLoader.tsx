@@ -1,6 +1,7 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 import { useEffect, useState } from "react";
+const { allContracts } = require("../../onchain/abis/AllContracts")
 
 const { ethers } = require("ethers");
 
@@ -69,15 +70,17 @@ export default function useContractLoader(providerOrSigner, config) {
           let contractList = {};
           let externalContractList = {};
           try {
-            contractList = config.hardhatContracts || require("../contracts/hardhat_contracts.json");
+            contractList = config.hardhatContracts || allContracts;
           } catch (e) {
             console.log(e);
           }
-          try {
-            externalContractList = config.externalContracts || require("../contracts/external_contracts.js");
-          } catch (e) {
-            console.log(e);
-          }
+
+          // If adding external contracts then you can use this below
+          // try {
+          //   externalContractList = config.externalContracts || require("../contracts/external_contracts.js");
+          // } catch (e) {
+          //   console.log(e);
+          // }
 
           let combinedContracts = {};
 
