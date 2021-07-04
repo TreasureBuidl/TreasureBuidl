@@ -4,10 +4,12 @@ import Button, {
   ButtonType,
 } from '@components/Button/Button'
 import React from 'react'
+import useEthers from 'hooks/useEthers'
 import useTreasure from 'hooks/useTreasure'
 import TokenAmountRow from '@components/TokenAmountRow'
 
 export default function TreasureModal({ toggle }) {
+  const { treasureAddress } = useEthers()
   const { actualTreasureAmounts } = useTreasure()
 
   return (
@@ -19,7 +21,7 @@ export default function TreasureModal({ toggle }) {
               <h2 className="text-xl uppercase mr-2">Treasure</h2>
             </div>
 
-            <div>0x7C14DF1F68... 341B9DD08952</div>
+            <div>{treasureAddress}</div>
             <div className="col-start-3 flex flex-row justify-end">
               <div
                 onClick={() => toggle()}
