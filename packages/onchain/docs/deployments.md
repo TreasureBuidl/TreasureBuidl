@@ -6,7 +6,7 @@ Addresses of the deployed contracts on various  networks.
 
 | Label | Info |
 |:--|:---|
-| Deployed Token Ownership | 0xF338a01e28C37dcfe7E68b3495EcB1010620446b
-| Deployed Treasure Maps | 0xdD898897406b0f31D40F76E0aaF2DC8400555678
-| Deployed Planet Factory | 0x4b256CF68Dbf692ef9426B79db21361A7FF15d9B
-| Deployed Test Token | 0x36d3BE9a20a6D30d715F49bbA709366a937652F2
+| Deployed Token Ownership | 0x3D251e3510c2AB920C76C8eF6c29c1EB97B2a87C
+| Deployed Treasure Maps | 0x434949e70d254aada01E09b714e87f7e5172c240
+| Deployed Planet Factory | 0xFb71fa01692fAE7f8DDbaed6C2E4C1F3eD7E2a8E
+| Deployed Test Token | 0x09C3B7EB18e891C73A4eb04Daa2D3609A9210333
