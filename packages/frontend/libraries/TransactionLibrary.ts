@@ -211,18 +211,18 @@ class BalancerLibrary extends ProjectLibrary {
       }
     ]
     this.functionSig = [
-      "swap(SingleSwap,FundManagement,uint256,uint256)","batchSwap(uint256,SingleSwap[],FundManagement[],uint256,uint256)",
+      "swap(SingleSwap,FundManagement,uint256,uint256)",
       "batchSwap(SwapKind,BatchSwapStep[],IAsset[],FundManagement,int256[],uint256)",
       "queryBatchSwap(SwapKind,BatchSwapStep[],IAsset[],FundManagement)",
       "flashLoan(IFlashLoanRecipient,IERC20[],uint256[],bytes)"
     ];
     this.fullFunctionSig = [
-      "swap(SingleSwap request,FundManagement funds,uint256 limit,uint256 deadline) external returns (uint256 assetDelta)",
-      "batchSwap(SwapKind kind,BatchSwapStep[] memory swaps,IAsset[] memory assets,FundManagement memory funds,int256[] memory limits,uint256 deadline)",
-      "queryBatchSwap(SwapKind kind,BatchSwapStep[] memory swaps,IAsset[] memory assets,FundManagement memory funds)",
-      "flashLoan(IFlashLoanRecipient recipient,IERC20[] memory tokens,uint256[] memory amounts,bytes memory userData)"
+      "swap(SingleSwap request,FundManagement funds,uint256 limit,uint256 deadline) returns (uint256 assetDelta)",
+      "batchSwap(SwapKind kind,BatchSwapStep[] swaps,IAsset[] assets,FundManagement funds,int256[] limits,uint256 deadline)",
+      "queryBatchSwap(SwapKind kind,BatchSwapStep[] swaps,IAsset[] assets,FundManagement funds)",
+      "flashLoan(IFlashLoanRecipient recipient,IERC20[] tokens,uint256[] amounts,bytes userData)"
     ];
-    this.description = ["The vault supports single swaps, a way to perform exactly one trade directly and gas-efficiently with a particular pool (e.g., for token sale GUIs). You can still use the internal balance.", "", "", ""];
+    this.description = ["", "", "", ""];
     this.paramToolTip = ["", "", "", ""];
     this.operations = [Operation.swap, Operation.batchSwap, Operation.queryBatchSwap, Operation.flashloan];
     this.hasInput = [true, true, true, true];
