@@ -193,9 +193,35 @@ class BalancerLibrary extends ProjectLibrary {
     this.cardUrl = 'url(/images/cards/whiteCard.png)';
     this.cssClass = 'bg-balancer';
     this.protocol = Protocol.Balancer;
-    this.networks = []
-    this.functionSig = ["swap(SingleSwap,FundManagement,uint256,uint256)"];
-    this.fullFunctionSig = ["swap(SingleSwap request,FundManagement funds,uint256 limit,uint256 deadline) external returns (uint256 assetDelta)"];
+    this.networks = [
+      {
+        id: 1,
+        name: "Mainnet",
+        contractAddress: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+      },
+      {
+        id: 4,
+        name: "Rinkeby",
+        contractAddress: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+      },
+      {
+        id: 42,
+        name: "Kovan",
+        contractAddress: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+      }
+    ]
+    this.functionSig = [
+      "swap(SingleSwap,FundManagement,uint256,uint256)","batchSwap(uint256,SingleSwap[],FundManagement[],uint256,uint256)",
+      "batchSwap(SwapKind,BatchSwapStep[],IAsset[],FundManagement,int256[],uint256)",
+      "queryBatchSwap(SwapKind,BatchSwapStep[],IAsset[],FundManagement)",
+      "flashLoan(IFlashLoanRecipient,IERC20[],uint256[],bytes)"
+    ];
+    this.fullFunctionSig = [
+      "swap(SingleSwap request,FundManagement funds,uint256 limit,uint256 deadline) external returns (uint256 assetDelta)",
+      "batchSwap(SwapKind kind,BatchSwapStep[] memory swaps,IAsset[] memory assets,FundManagement memory funds,int256[] memory limits,uint256 deadline)",
+      "queryBatchSwap(SwapKind kind,BatchSwapStep[] memory swaps,IAsset[] memory assets,FundManagement memory funds)",
+      "flashLoan(IFlashLoanRecipient recipient,IERC20[] memory tokens,uint256[] memory amounts,bytes memory userData)"
+    ];
     this.description = ["The vault supports single swaps, a way to perform exactly one trade directly and gas-efficiently with a particular pool (e.g., for token sale GUIs). You can still use the internal balance."];
     this.paramToolTip = [""];
     this.operations = [Operation.swap];
