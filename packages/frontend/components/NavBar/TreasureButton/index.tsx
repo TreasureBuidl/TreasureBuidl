@@ -6,7 +6,7 @@ import useEthers from 'hooks/useEthers'
 
 function TreasureButton() {
   const { toggle } = useTreasureModal()
-  const { treasureAddress, writeContracts, tx } = useEthers()
+  const { address, treasureAddress, writeContracts, tx, loadTreasureAddress } = useEthers()
 
   const getShortenedAddress = () => {
     return `${treasureAddress.substring(0, 6)}...${treasureAddress.slice(-4)}`
@@ -30,6 +30,7 @@ function TreasureButton() {
     });
     console.log("awaiting metamask/web3 confirm result...", result);
     console.log(await result);
+    loadTreasureAddress(writeContracts, address, tx)
   }
 
   return (

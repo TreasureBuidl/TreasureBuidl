@@ -16,13 +16,14 @@ const initialEthersState = {
   web3Modal: null,
   tx: null,
   writeContracts: null,
-  treasureAddress: null
+  treasureAddress: null,
 };
 
 const EthersContext = createContext({
   ...initialEthersState,
   loadWeb3Modal: (web3Modal, logoutOfWeb3Modal) => {},
   logoutOfWeb3Modal: () => {},
+  loadTreasureAddress: (writeContracts, userAddress, tx) => {},
 });
 
 export const EthersProvider = ({ children }) => {
@@ -48,6 +49,13 @@ export const EthersProvider = ({ children }) => {
   const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
   const writeContracts = useContractLoader(userSigner, { chainId: localChainId });
 
+  const loadTreasureAddress = useCallback(async (writeContracts, userAddress, tx) => {
+    if (writeContracts) {
+      const result = await tx(writeContracts.TokenOwnership?.getOwnedContract(userAddress), null);
+      if (result) setTreasureAddress(result)
+    }
+  }, [setTreasureAddress])
+
   useEffect(() => {
     async function getAddress() {
       if (userSigner) {
@@ -55,10 +63,7 @@ export const EthersProvider = ({ children }) => {
         setAddress(newAddress);
 
         // get owned treasure
-        if (writeContracts) {
-          const result = await tx(writeContracts.TokenOwnership?.getOwnedContract(newAddress), null);
-          setTreasureAddress(result)
-        }
+        loadTreasureAddress(writeContracts, newAddress, tx)
       }
     }
     getAddress();
@@ -151,6 +156,7 @@ export const EthersProvider = ({ children }) => {
         treasureAddress,
         loadWeb3Modal,
         logoutOfWeb3Modal,
+        loadTreasureAddress,
       }}
     >
       {children}
