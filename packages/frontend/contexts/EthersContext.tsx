@@ -6,6 +6,7 @@ import { INFURA_ID, NETWORKS } from "utils/constants"
 import useUserSigner from "hooks/useUserSigner"
 import useContractLoader from "hooks/useContractLoader"
 import useGasPrice from "hooks/useGasPrice"
+import Transactor from "helpers/Transactor"
 const { ethers } = require("ethers")
 
 const initialEthersState = {
@@ -13,6 +14,8 @@ const initialEthersState = {
   injectedProvider: null,
   localProvider: null,
   web3Modal: null,
+  tx: null,
+  writeContracts: null
 };
 
 const EthersContext = createContext({
@@ -32,13 +35,16 @@ export const EthersProvider = ({ children }) => {
   // when connecting to mainnet, use below
   // const mainnetProvider = new ethers.providers.StaticJsonRpcProvider("https://mainnet.infura.io/v3/" + INFURA_ID);
 
-  /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
-  const gasPrice = useGasPrice(targetNetwork, "fast");
-
-  const localContracts = useContractLoader(localProvider, {});
-
   // Use your injected provider from 🦊 Metamask
   const userSigner = useUserSigner(injectedProvider);
+  /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
+  const gasPrice = useGasPrice(targetNetwork, "fast");
+  // The transactor wraps transactions and provides notificiations
+  const tx = Transactor(userSigner, gasPrice);
+
+  // If you want to make 🔐 write transactions to your contracts, use the userSigner:
+  const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
+  const writeContracts = useContractLoader(userSigner, { chainId: localChainId });
 
   useEffect(() => {
     async function getAddress() {
@@ -132,6 +138,8 @@ export const EthersProvider = ({ children }) => {
         injectedProvider,
         localProvider,
         web3Modal,
+        tx,
+        writeContracts,
         loadWeb3Modal,
         logoutOfWeb3Modal,
       }}
