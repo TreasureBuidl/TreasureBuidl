@@ -32,6 +32,7 @@ export const EthersProvider = ({ children }) => {
   const localProviderUrl = targetNetwork.rpcUrl;
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
+  const [treasureAddress, setTreasureAddress] = useState();
   const [localProvider, setLocalProvider] = useState(new ethers.providers.StaticJsonRpcProvider(localProviderUrl));
   // when connecting to mainnet, use below
   // const mainnetProvider = new ethers.providers.StaticJsonRpcProvider("https://mainnet.infura.io/v3/" + INFURA_ID);
@@ -47,18 +48,21 @@ export const EthersProvider = ({ children }) => {
   const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
   const writeContracts = useContractLoader(userSigner, { chainId: localChainId });
 
-  // get treasure address if owns one
-  const treasureAddress = null
-
   useEffect(() => {
     async function getAddress() {
       if (userSigner) {
         const newAddress = await userSigner.getAddress();
         setAddress(newAddress);
+
+        // get owned treasure
+        if (writeContracts) {
+          const result = await tx(writeContracts.TokenOwnership?.getOwnedContract(newAddress), null);
+          setTreasureAddress(result)
+        }
       }
     }
     getAddress();
-  }, [userSigner]);
+  }, [userSigner, writeContracts]);
 
   // Coinbase walletLink init
   const walletLink = new WalletLink({

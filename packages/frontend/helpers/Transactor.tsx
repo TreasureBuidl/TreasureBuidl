@@ -9,7 +9,7 @@ const { ethers } = require("ethers");
 // https://docs.blocknative.com/notify
 const callbacks = {};
 
-const DEBUG = true;
+const DEBUG = false;
 
 export default function Transactor(providerOrSigner, gasPrice, etherscan = null) {
   if (typeof providerOrSigner !== "undefined") {
@@ -28,11 +28,11 @@ export default function Transactor(providerOrSigner, gasPrice, etherscan = null)
         network = await providerOrSigner.getNetwork();
       }
 
-      console.log("network", network);
+      if (DEBUG) console.log("network", network);
       
       var options = null;
       var notify = null;
-      if(navigator.onLine){
+      if(navigator.onLine && callback){
         options = {
           dappId: BLOCKNATIVE_DAPPID,
           system: "ethereum",
@@ -81,34 +81,34 @@ export default function Transactor(providerOrSigner, gasPrice, etherscan = null)
 
         if (callback) {
           callbacks[result.hash] = callback;
-        }
 
-        // if it is a valid Notify.js network, use that, if not, just send a default notification
-        if (notify && [1, 3, 4, 5, 42, 100].indexOf(network.chainId) >= 0) {
-          const { emitter } = notify.hash(result.hash);
-          emitter.on("all", transaction => {
-            return {
-              onclick: () => window.open((etherscan || etherscanTxUrl) + transaction.hash),
-            };
-          });
-        } else {
-          notification.info({
-            message: "Local Transaction Sent",
-            description: result.hash,
-            placement: "bottomRight",
-          });
-          // on most networks BlockNative will update a transaction handler,
-          // but locally we will set an interval to listen...
-          if (callback) {
-            const txResult = await tx;
-            const listeningInterval = setInterval(async () => {
-              console.log("CHECK IN ON THE TX", txResult, provider);
-              const currentTransactionReceipt = await provider.getTransactionReceipt(txResult.hash);
-              if (currentTransactionReceipt && currentTransactionReceipt.confirmations) {
-                callback({ ...txResult, ...currentTransactionReceipt });
-                clearInterval(listeningInterval);
-              }
-            }, 500);
+          // if it is a valid Notify.js network, use that, if not, just send a default notification
+          if (notify && [1, 3, 4, 5, 42, 100].indexOf(network.chainId) >= 0) {
+            const { emitter } = notify.hash(result.hash);
+            emitter.on("all", transaction => {
+              return {
+                onclick: () => window.open((etherscan || etherscanTxUrl) + transaction.hash),
+              };
+            });
+          } else {
+            notification.info({
+              message: "Local Transaction Sent",
+              description: result.hash,
+              placement: "bottomRight",
+            });
+            // on most networks BlockNative will update a transaction handler,
+            // but locally we will set an interval to listen...
+            if (callback) {
+              const txResult = await tx;
+              const listeningInterval = setInterval(async () => {
+                console.log("CHECK IN ON THE TX", txResult, provider);
+                const currentTransactionReceipt = await provider.getTransactionReceipt(txResult.hash);
+                if (currentTransactionReceipt && currentTransactionReceipt.confirmations) {
+                  callback({ ...txResult, ...currentTransactionReceipt });
+                  clearInterval(listeningInterval);
+                }
+              }, 500);
+            }
           }
         }
 
