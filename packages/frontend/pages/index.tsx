@@ -11,10 +11,13 @@ import ActionModal from '@components/ActionModal/ActionModal'
 import { useState } from 'react'
 import TreasureModal from '@components/TrasureModal/TreasureModal'
 import useTreasureModal from 'hooks/useTreasureModal'
+import useTreasure from 'hooks/useTreasure'
+import CreateButton from '@components/CreateButton'
 
 export default function Home() {
   const [actionModalState, setActionModalState] = useState(false)
   const { isShowing, toggle } = useTreasureModal()
+  const { actions } = useTreasure()
 
   return (
     <div className="bg-darkBlue h-screen w-screen">
@@ -47,6 +50,9 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {actions && actions.length && <div className="flex justify-center mt-2">
+        <CreateButton />
+      </div>}
     </div>
   )
 }
