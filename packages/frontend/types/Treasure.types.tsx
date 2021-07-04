@@ -4,6 +4,7 @@ export enum Protocol {
   TreasureBuidl = 'Treasure Buidl',
   Uniswap = 'Uniswap V2',
   Balancer = 'Balancer V1',
+  StakeDao = 'Stake Dao',
 }
 
 // #TODO: not all of them, just the ones from the designs

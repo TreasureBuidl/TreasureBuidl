@@ -185,21 +185,42 @@ class CompoundLibrary extends ProjectLibrary {
   }
 }
 
+// #TODO: correct the networks, function sigs, descriptions, tooltips
 class BalancerLibrary extends ProjectLibrary {
   constructor() {
     super();
     this.iconUrl = 'url(/images/protocolIcons/balancerIcon.png)';
-    this.cardUrl = 'url(/images/cards/balancerCard.png)';
+    this.cardUrl = 'url(/images/cards/whiteCard.png)';
     this.cssClass = 'bg-balancer';
     this.protocol = Protocol.Balancer;
     this.networks = []
     this.functionSig = ["swap(SingleSwap,FundManagement,uint256,uint256)"];
     this.fullFunctionSig = ["swap(SingleSwap request,FundManagement funds,uint256 limit,uint256 deadline) external returns (uint256 assetDelta)"];
     this.description = ["The vault supports single swaps, a way to perform exactly one trade directly and gas-efficiently with a particular pool (e.g., for token sale GUIs). You can still use the internal balance."];
+    this.paramToolTip = [""];
     this.operations = [Operation.swap];
     this.hasInput = [true];
     this.hasOutput = [true];
   }
 }
 
-export const libraries: ProjectLibrary[] = [new UniswapV2Library(), new AaveLibrary(), new CompoundLibrary(), new BalancerLibrary()];
+// #TODO: correct the networks, function sigs, descriptions, tooltips
+class StakeDaoLibrary extends ProjectLibrary {
+  constructor() {
+    super();
+    this.iconUrl = 'url(/images/protocolIcons/stakedaoIcon.png)';
+    this.cardUrl = 'url(/images/cards/whiteCard.png)';
+    this.cssClass = 'bg-stakeDao';
+    this.protocol = Protocol.StakeDao;
+    this.networks = []
+    this.functionSig = ["deposit(uint256)", "withdraw(uint256)"];
+    this.fullFunctionSig = ["deposit(_amount uint256)", "withdraw(_shares uint256)"];
+    this.description = ["", ""];
+    this.paramToolTip = ["", ""];
+    this.operations = [Operation.deposit, Operation.withdraw];
+    this.hasInput = [true, true];
+    this.hasOutput = [true, true];
+  }
+}
+
+export const libraries: ProjectLibrary[] = [new UniswapV2Library(), new StakeDaoLibrary(), new AaveLibrary(), new CompoundLibrary(), new BalancerLibrary()];

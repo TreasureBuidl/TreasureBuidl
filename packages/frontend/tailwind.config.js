@@ -33,6 +33,11 @@ module.exports = {
         dark: '#191919',
         darker: '#111011',
       },
+      stakeDao: {
+        DEFAULT: '#010001',
+        dark: '#111111',
+        darker: '#252525',
+      },
     },
     fontFamily: {
       body: ['Open Sans'],
