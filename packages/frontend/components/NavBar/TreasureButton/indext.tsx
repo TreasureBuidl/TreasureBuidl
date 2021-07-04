@@ -16,8 +16,8 @@ function TreasureButton() {
           className="bg-no-repeat bg-center mr-4"
           style={{
             backgroundImage: 'url(/images/icons/treasureIconPurple.png)',
-            width: 72,
-            height: 72,
+            width: 42,
+            height: 42,
           }}
         ></div>
       </div>

@@ -22,7 +22,7 @@ function NavBar() {
           TREASURE BUIDL
         </p>
       </div>
-      <div className="flex flex-row space-x-4">
+      <div className="flex flex-row space-x-4" style={{ height: 54 }}>
         {isConnected ? <TreasureButton /> : ''}
         <ConnectWalletButton />
       </div>
