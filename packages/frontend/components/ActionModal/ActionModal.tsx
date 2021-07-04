@@ -86,8 +86,8 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
 
   return (
     <div className="bg-black bg-opacity-75 h-screen w-screen text-white flex justify-center items-center fixed z-10">
-      <div className="w-3/4 h-3/4 bg-darkBlue border-white border-2 rounded-lg p-10 overflow-y-scroll scrollbar scrollbar scrollbar-thumb-offWhite scrollbar-darkBlue pb-20">
-        <div className="grid grid-cols-3 grid-flow-col items-center mb-10">
+      <div className="w-3/4 h-5/6 bg-darkBlue border-white border-2 rounded-lg p-10 overflow-y-scroll scrollbar scrollbar scrollbar-thumb-offWhite scrollbar-darkBlue pb-20">
+        <div className="grid grid-cols-3 grid-flow-col items-center mb-4">
           <h2 className="col-start-2 text-center uppercase text-2xl">
             New Action
           </h2>
