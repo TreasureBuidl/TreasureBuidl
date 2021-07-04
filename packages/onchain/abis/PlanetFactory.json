@@ -1,10 +1,4 @@
 {
-    "address": [
-      {
-        "rinkeby": "0xD35262a1B20F17ee9459b0Ca0B37bCB170631617",
-        "kovan": "0x61800b92d203328faFdA869582629789420E64dA"
-      }
-    ],
     "abi": [
       {
         "inputs": [
