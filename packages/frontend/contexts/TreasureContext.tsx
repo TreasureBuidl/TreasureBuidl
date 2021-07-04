@@ -9,7 +9,19 @@ const initialTreasureState: { actions: Action[], fromTreasureAmounts: Amount[], 
   actions: [],
   fromTreasureAmounts: [],
   toTreasureAmounts: [],
-  actualTreasureAmounts: [],
+  // #TODO: remove this dummy data
+  actualTreasureAmounts: [{
+    token: Token.USDC,
+    quantity: 1739.45
+  },
+  {
+    token: Token.Dai,
+    quantity: 25.85
+  },
+  {
+    token: Token.Ether,
+    quantity: 634.95
+  }],
 };
 
 export type TreasureAmounts = {

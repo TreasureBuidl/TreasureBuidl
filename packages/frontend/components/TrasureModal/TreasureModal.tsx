@@ -14,26 +14,26 @@ export default function TreasureModal({ toggle }) {
 
   return (
     <div className="bg-black bg-opacity-75 h-screen w-screen text-white flex justify-center items-center fixed z-10">
-      <div className="w-50 h-46 bg-darkBlue border-white border-2 rounded-lg p-10 overflow-y-scroll scrollbar scrollbar scrollbar-thumb-offWhite scrollbar-darkBlue flex justify-center">
+      <div className="bg-darkBlue border-white border-2 rounded-lg p-5 overflow-y-scroll scrollbar scrollbar-thumb-offWhite scrollbar-darkBlue flex justify-center">
         <div>
           <div className="flex flex-row items-center mb-10 justify-between">
             <div className="flex flex-row items-center">
               <h2 className="text-xl uppercase mr-2">Treasure</h2>
             </div>
 
-            <div>{treasureAddress}</div>
-            <div className="col-start-3 flex flex-row justify-end">
+            <div className="mr-5">{treasureAddress}</div>
+            <div>
               <div
                 onClick={() => toggle()}
-                className="w-10 transform rotate-45 text-5xl cursor-pointer"
+                className="w-10 transform rotate-45 text-5xl cursor-pointer align-right"
               >
                 +
               </div>
             </div>
           </div>
           <div className="bg-darkerBlue p-16 text-white flex flex-col justify-center items-center  border-white border-2 mb-10 mx-28">
-            <div className="flex flex-row  mb-4 items-center justify-center">
-              <div className="mr-16 flex flex-row items-center">
+            <div className="flex flex-row  mb-4 items-center justify-center" style={{ minWidth: 180 }}>
+              <div className="flex flex-row items-center">
                 {actualTreasureAmounts.length ? (
                   <div className="flex flex-col mb-4">
                     {actualTreasureAmounts.map((amount) => {
