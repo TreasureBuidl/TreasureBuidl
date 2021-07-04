@@ -10,11 +10,12 @@ export enum Protocol {
 // #TODO: not all of them, just the ones from the designs
 export enum Operation {
   addLiquidity = 'ADD LIQUIDITY',
+  batchSwap = 'BATCH SWAP',
   borrow = 'BORROW',
-  closeFlashloan = 'CLOSE FLASHLOAN',
   collectComp = 'COLLECT COMP',
   deposit = 'DEPOSIT',
-  openFlashloan = 'OPEN FLASHLOAN',
+  flashloan = 'FLASHLOAN',
+  queryBatchSwap = 'QUERY BATCH SWAP',
   removeLiquidity = 'REMOVE LIQUIDITY',
   repay = 'REPAY',
   supply = 'SUPPLY',

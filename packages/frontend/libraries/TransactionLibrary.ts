@@ -132,7 +132,7 @@ class AaveLibrary extends ProjectLibrary {
       "asset - address of the underlying asset. amount - amount to be borrowed, expressed in wei units. Use uint(-1) to repay the entire debt,  ONLY when the repayment is not executed on behalf of a 3rd party. In case of repayments on behalf of another user, it's recommended to send an _amount slightly higher than the current borrowed amount. rateMode - the type of borrow debt. Stable: 1, Variable: 2. onBehalfOf - address of user who will incur the debt. Use msg.sender when not calling on behalf of a different user.",
       "receiverAddress - address of the contract receiving the funds. Must implement the IFlashLoanReceiver interface. assets - addresses of the reserves to flashloan. amounts - amounts of assets to flashloan. This needs to contain the same number of elements as assets. modes - the types of debt to open if the flashloan is not returned. 0: Don't open any debt, just revert 1: stable mode debt 2: variable mode debt. onBehalfOf - if the associated mode is not 0 then the incurred debt will be applied to the onBehalfOf address. Note: onBehalfOf must already have approved sufficient borrow allowance of the associated asset to msg.sender. params - bytes-encoded parameters to be used by the receiverAddress contract. referralCode - referral code for our referral program"
     ];
-    this.operations = [Operation.deposit, Operation.withdraw, Operation.borrow, Operation.repay, Operation.openFlashloan];
+    this.operations = [Operation.deposit, Operation.withdraw, Operation.borrow, Operation.repay, Operation.flashloan];
     this.hasInput = [true, true, false, true, false];
     this.hasOutput = [true, true, true, true, true];
   }
@@ -185,7 +185,7 @@ class CompoundLibrary extends ProjectLibrary {
   }
 }
 
-// #TODO: correct the networks, function sigs, descriptions, tooltips
+// #TODO: correct the descriptions, tooltips
 class BalancerLibrary extends ProjectLibrary {
   constructor() {
     super();
@@ -222,11 +222,11 @@ class BalancerLibrary extends ProjectLibrary {
       "queryBatchSwap(SwapKind kind,BatchSwapStep[] memory swaps,IAsset[] memory assets,FundManagement memory funds)",
       "flashLoan(IFlashLoanRecipient recipient,IERC20[] memory tokens,uint256[] memory amounts,bytes memory userData)"
     ];
-    this.description = ["The vault supports single swaps, a way to perform exactly one trade directly and gas-efficiently with a particular pool (e.g., for token sale GUIs). You can still use the internal balance."];
-    this.paramToolTip = [""];
-    this.operations = [Operation.swap];
-    this.hasInput = [true];
-    this.hasOutput = [true];
+    this.description = ["The vault supports single swaps, a way to perform exactly one trade directly and gas-efficiently with a particular pool (e.g., for token sale GUIs). You can still use the internal balance.", "", "", ""];
+    this.paramToolTip = ["", "", "", ""];
+    this.operations = [Operation.swap, Operation.batchSwap, Operation.queryBatchSwap, Operation.flashloan];
+    this.hasInput = [true, true, true, true];
+    this.hasOutput = [true, true, true, true];
   }
 }
 
