@@ -1,5 +1,5 @@
 {
-    "address": "0x434949e70d254aada01E09b714e87f7e5172c240",
+    "address": "0xe46Fa1Ab56370581E110E0d00bd49B9E01E55a70",
     "abi": [
       {
         "inputs": [],
@@ -238,6 +238,25 @@
       {
         "inputs": [
           {
+            "internalType": "address",
+            "name": "_creator",
+            "type": "address"
+          }
+        ],
+        "name": "getAllCreatedMaps",
+        "outputs": [
+          {
+            "internalType": "uint256[]",
+            "name": "",
+            "type": "uint256[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
             "internalType": "uint256",
             "name": "tokenId",
             "type": "uint256"
@@ -353,11 +372,6 @@
             "internalType": "address",
             "name": "creator",
             "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "explores",
-            "type": "uint256"
           }
         ],
         "stateMutability": "view",
