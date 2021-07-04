@@ -32,8 +32,8 @@ export default function TreasureModal({ toggle }) {
             </div>
           </div>
           <div className="bg-darkerBlue p-16 text-white flex flex-col justify-center items-center  border-white border-2 mb-10 mx-28">
-            <div className="flex flex-row  mb-4 items-center justify-center">
-              <div className="mr-16 flex flex-row items-center">
+            <div className="flex flex-row  mb-4 items-center justify-center" style={{ minWidth: 180 }}>
+              <div className="flex flex-row items-center">
                 {actualTreasureAmounts.length ? (
                   <div className="flex flex-col mb-4">
                     {actualTreasureAmounts.map((amount) => {
