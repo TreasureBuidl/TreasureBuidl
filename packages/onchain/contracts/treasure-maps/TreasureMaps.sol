@@ -29,12 +29,6 @@ contract TreasureMaps is ModifiedErc721 {
         address[] callTargets;
         // Array of encoded function signature for execution at target.
         string[] callFunctionSigs;
-        // Count of all users who have execute map instructions.
-        uint256 explores;
-        // // If the map is active.
-        // bool activeMap;
-        // // If the map has a fee.
-        // uint256 mapFee;
     }
     // Token IDs (type OUTLINE) to treasure map instructions.
     mapping(uint256 => Outline) public outlines_;
@@ -53,6 +47,8 @@ contract TreasureMaps is ModifiedErc721 {
     }
     // Token IDs (type TREASURE_MAPS) to coordinate details.
     mapping(uint256 => TreasureMap) public treasureMaps_;
+    // Creator      => All created treasure maps
+    mapping(address => uint256[]) private creatorMaps_;
     // FUTURE A conditional treasure outline param which will then ignore passed
     // in variables for the ones specified in the outline. 
 
@@ -66,6 +62,13 @@ contract TreasureMaps is ModifiedErc721 {
 
     }
 
+    /**
+     * @param   _id ID of the treasure map.
+     * @return  callTargets The array of target addresses stored in the map.
+     * @return  callValues The array of native token values for the calls stored
+     *          in the map. 
+     * @return  callData The array of encoded call data stored in the map.
+     */
     function getTreasureMap(uint256 _id) public view returns(
         address[] memory callTargets,
         uint256[] memory callValues,
@@ -74,6 +77,14 @@ contract TreasureMaps is ModifiedErc721 {
         callTargets = treasureMaps_[_id].callTargets;
         callValues = treasureMaps_[_id].callValues;
         callData = treasureMaps_[_id].callData;
+    }
+
+    /**
+     * @param   _creator Address of the map creator.
+     * @return  uint256[] Array of all the Map ID's that this creator has made.
+     */
+    function getAllCreatedMaps(address _creator) public view returns(uint256[] memory) {
+        return creatorMaps_[_creator];
     }
 
     /**
@@ -143,8 +154,7 @@ contract TreasureMaps is ModifiedErc721 {
         outlines_[tokenID] = Outline({
             creator: _creator,
             callTargets: _callTargets,
-            callFunctionSigs: _functionSigs,
-            explores: 0
+            callFunctionSigs: _functionSigs
         });
 
         _mint(OUTLINE, _creator, tokenID);
@@ -190,6 +200,8 @@ contract TreasureMaps is ModifiedErc721 {
             callData: generatedCallData,
             callValues: _callValues
         });
+
+        creatorMaps_[_creator].push(tokenID);
 
         _mint(TREASURE_MAPS, _creator, tokenID);
     }

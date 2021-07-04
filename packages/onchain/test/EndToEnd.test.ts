@@ -135,6 +135,15 @@ describe("End To End Test", () => {
                     ]
                 )
             ).wait();
+
+            let createdMaps = await treasureMaps.getAllCreatedMaps(map_creator.address);
+
+            expect(
+				createdMaps[0].toString(),
+				"Creator does not have correct map"
+			).to.equal(
+				"1"
+			);
         });
 
         it("Cannot create treasure map with invalid inputs", async () => {
@@ -261,10 +270,6 @@ describe("End To End Test", () => {
             ).wait();
 
             treasurePlanet = TreasurePlanet.attach(tx.events[2].args.planet);
-
-            let reverseCheck = await tokenOwnership.getOwnedContract(
-                planet_owner.address
-            );
         });
 
         it("ERC721 token", async () => {
