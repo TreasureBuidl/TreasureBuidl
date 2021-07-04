@@ -15,7 +15,8 @@ const initialEthersState = {
   localProvider: null,
   web3Modal: null,
   tx: null,
-  writeContracts: null
+  writeContracts: null,
+  treasureAddress: null
 };
 
 const EthersContext = createContext({
@@ -45,6 +46,9 @@ export const EthersProvider = ({ children }) => {
   // If you want to make 🔐 write transactions to your contracts, use the userSigner:
   const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
   const writeContracts = useContractLoader(userSigner, { chainId: localChainId });
+
+  // get treasure address if owns one
+  const treasureAddress = null
 
   useEffect(() => {
     async function getAddress() {
@@ -140,6 +144,7 @@ export const EthersProvider = ({ children }) => {
         web3Modal,
         tx,
         writeContracts,
+        treasureAddress,
         loadWeb3Modal,
         logoutOfWeb3Modal,
       }}
