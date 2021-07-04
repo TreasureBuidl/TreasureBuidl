@@ -10,8 +10,8 @@
 # About
 
 This project has been split into the following folders:
-* [onchain](./onchain/README.md)
-* [frontend](./frontend/README.md)
+* [onchain](./packages/onchain/README.md)
+* [frontend](./packages/frontend/README.md)
 
 The on chain folder contains the smart contract side of the project, while the front end folder contains the UI, and data management. 
 
