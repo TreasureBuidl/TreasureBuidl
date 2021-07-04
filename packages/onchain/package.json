@@ -13,6 +13,7 @@
     "start": "hardhat node",
     "deploy:local": "hardhat run scripts/deploy.js --network localhost",
     "deploy:rinkeby": "hardhat run scripts/deploy.js --network rinkeby",
+    "deploy:kovan": "hardhat run scripts/deploy.js --network kovan",
     "clean": "rm -rf artifacts && rm -rf cache && rm -rf docs/gen-docs && coverage.json && coverage",
     "deep-clean": "yarn clean && rm -rf node_modules && yarn.lock"
   },

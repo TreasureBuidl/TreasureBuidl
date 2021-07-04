@@ -32,6 +32,10 @@ const config: HardhatUserConfig = {
       url: `https://rinkeby.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
       accounts: [`${process.env.RINKEBY_PRIVATE_KEY}`]
     },
+    kovan: {
+      url: `https://kovan.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+      accounts: [`${process.env.RINKEBY_PRIVATE_KEY}`]
+    }
     // mainnet: {
     //   url: `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
     //   accounts: [`${process.env.MAIN_PRV_KEY}`]
