@@ -4,13 +4,12 @@ import useTreasure from 'hooks/useTreasure'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Action, Operation, Protocol, Token } from 'types/Treasure.types'
-import { libraries } from 'libraries/TransactionLibrary';
+import { libraries } from 'libraries/TransactionLibrary'
 import ProtocolIcon from '@components/ProtocolIcon'
 
 type ActionModalProps = {
   toggleActionModal: (state: boolean) => void
 }
-
 
 export default function ActionModal({ toggleActionModal }: ActionModalProps) {
   const [actions, setActions] = useState([])
@@ -22,32 +21,31 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
   }
 
   const paramTypesFromSig = (sig: string) => {
-    let params = sig.split("(")[1]
-    params = params.slice(0, params.length - 1);
-    return params.split(",");
+    let params = sig.split('(')[1]
+    params = params.slice(0, params.length - 1)
+    return params.split(',')
   }
 
   const paramNamesFromFullSig = (sig: string) => {
-    let p = sig.split("(")[1];
-    p = p.split(")")[0];
-    let params = p.split(",");
+    let p = sig.split('(')[1]
+    p = p.split(')')[0]
+    let params = p.split(',')
     let paramNames = params.map((x) => {
-      let split = x.split(" ");
-      return split[split.length - 1];
-    });
-    return paramNames;
+      let split = x.split(' ')
+      return split[split.length - 1]
+    })
+    return paramNames
   }
 
   useEffect(() => {
-    let actions = [];
+    let actions = []
     libraries.forEach((protocol) => {
       protocol.functionSig.forEach((_, i) => {
-
         // calculate parameter types from a function signature
-        const paramTypes = paramTypesFromSig(protocol.functionSig[i]);
+        const paramTypes = paramTypesFromSig(protocol.functionSig[i])
 
         // get paramater names from a full function signature
-        const paramNames = paramNamesFromFullSig(protocol.fullFunctionSig[i]);
+        const paramNames = paramNamesFromFullSig(protocol.fullFunctionSig[i])
 
         let action = {
           id: uuidv4(),
@@ -64,24 +62,24 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
             paramTypes: paramTypes,
             paramNames: paramNames,
             paramToolTips: protocol.paramToolTip[i],
-          }
-        };
+          },
+        }
         if (protocol.hasInput[i]) {
-          action["input"] = {
+          action['input'] = {
             token: Token.USDT, // TODO more thought should be put into determining input and output tokens
             quantity: null,
           }
         }
         if (protocol.hasOutput[i]) {
-          action["output"] = {
+          action['output'] = {
             token: Token.USDC,
             quantity: null,
           }
         }
-        actions.push(action);
-      });
-    });
-    setActions(actions);
+        actions.push(action)
+      })
+    })
+    setActions(actions)
   }, [])
 
   return (
@@ -114,7 +112,7 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
                     <div key={action.id} className="mr-10">
                       <Button
                         size={ButtonSize.Small}
-                        protocolCssClass={action.cssClass}
+                        protocolCssClass={action.type.protocol}
                         buttonShape={ButtonShape.Wide}
                         onClick={() => handleActionSelection(action)}
                       >
