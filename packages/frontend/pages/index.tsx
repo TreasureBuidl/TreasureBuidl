@@ -32,7 +32,7 @@ export default function Home() {
       <div className="flex justify-center mt-12">
         <FromToTreasure />
       </div>
-      <div className="flex flex-row justify-center mt-24">
+      <div className="flex flex-row justify-center mt-12">
         <div
           className="flex flex-row w-5/6 items-center scrollbar scrollbar-thumb-offWhite scrollbar-track-darkerBlue pb-12"
           style={{ height: 501 }}
@@ -50,9 +50,11 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {actions && actions.length && <div className="flex justify-center mt-2">
-        <CreateButton />
-      </div>}
+      {actions && actions.length && (
+        <div className="flex justify-center mt-2">
+          <CreateButton />
+        </div>
+      )}
     </div>
   )
 }
