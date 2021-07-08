@@ -54,3 +54,7 @@ export type Action = {
   cardUrl: string
   cssClass: string
 }
+
+export type TreasureMap = {
+  id: string
+}
