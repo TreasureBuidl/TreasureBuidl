@@ -30,9 +30,12 @@ export type ActionType = {
 
 // #TODO: not all of them, just the ones from the designs
 export enum Token {
+  aUNI = 'aUNI',
   aUSDC = 'aUSDC',
   aUSDT = 'aUSDT',
   cUNI = 'cUNI',
+  cUSDT = 'cUSDT',
+  cUSDC = 'cUSDC',
   Dai = 'DAI',
   Ether = 'ETH',
   Uni = 'UNI',
@@ -53,6 +56,7 @@ export type Action = {
   iconUrl: string
   cardUrl: string
   cssClass: string
+  inputToOutput: Function
 }
 
 export type TreasureMap = {

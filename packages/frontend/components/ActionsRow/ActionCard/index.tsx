@@ -9,13 +9,27 @@ function ActionCard({ action }: { action: Action }) {
   const { updateAction } = useTreasure()
 
   const handleInputQuantityChange = (event) => {
-    updateAction({
-      ...action,
-      input: {
-        ...action.input,
-        quantity: event.target.value,
-      },
-    })
+    if (action.inputToOutput != null) {
+      updateAction({
+        ...action,
+        input: {
+          ...action.input,
+          quantity: event.target.value,
+        },
+        output: {
+          ...action.output,
+          quantity: event.target.value,
+        }
+      })
+    } else {
+      updateAction({
+        ...action,
+        input: {
+          ...action.input,
+          quantity: event.target.value,
+        },
+      })
+    }
   }
 
   const handleOutputQuantityChange = (event) => {
@@ -29,13 +43,27 @@ function ActionCard({ action }: { action: Action }) {
   }
 
   const handleInputTokenChange = (event) => {
-    updateAction({
-      ...action,
-      input: {
-        ...action.input,
-        token: event.target.value,
-      },
-    })
+    if (action.inputToOutput != null) {
+      updateAction({
+        ...action,
+        input: {
+          ...action.input,
+          token: event.target.value,
+        },
+        output: {
+          ...action.output,
+          token: action.inputToOutput(event.target.value),
+        }
+      })
+    } else {
+      updateAction({
+        ...action,
+        input: {
+          ...action.input,
+          token: event.target.value,
+        },
+      })
+    }
   }
 
   const handleOutputTokenChange = (event) => {
