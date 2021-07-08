@@ -2,10 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  @font-face {
-    font-family: Gidole;
-    font-weight: 400;
-    src: url(/fonts/gidole/Gidole-Regular.otf) format("otf");
-  }
+@font-face {
+  font-family: 'Gidole';
+  font-weight: 400;
+  src: local('Gidole'), url('/fonts/gidole/Gidole-Regular.otf') format('otf');
 }

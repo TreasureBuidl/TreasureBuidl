@@ -20,7 +20,7 @@ export default function Home() {
   const { actions } = useTreasure()
 
   return (
-    <div className="bg-darkBlue h-screen w-screen">
+    <div className="bg-darkBlue h-screen w-screen font-display">
       {actionModalState ? (
         <ActionModal toggleActionModal={setActionModalState} />
       ) : (
