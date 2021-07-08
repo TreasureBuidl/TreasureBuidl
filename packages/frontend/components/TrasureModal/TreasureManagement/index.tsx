@@ -21,7 +21,7 @@ export default function TreasureManagement({
   return (
     <div>
       <TreasureModalHeader treasureAddress={treasureAddress} toggle={toggle} />
-      <h3 className="text-white font-semibold pb-4">Treasure Management</h3>
+      <h3 className="text-white text-xl pb-4">TOKENS</h3>
       <TreasureAmounts actualTreasureAmounts={actualTreasureAmounts} />
       <div className="flex flex-row justify-center space-x-4">
         <Button
@@ -30,7 +30,7 @@ export default function TreasureManagement({
           protocolCssClass={ButtonType.Primary}
           onClick={() => {}}
         >
-          Deposit
+          DEPOSIT
         </Button>
         <Button
           size={ButtonSize.Large}
@@ -38,7 +38,7 @@ export default function TreasureManagement({
           protocolCssClass={ButtonType.Primary}
           onClick={() => {}}
         >
-          Withdraw
+          WITHDRAW
         </Button>
       </div>
     </div>
