@@ -56,6 +56,7 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
           iconUrl: protocol.iconUrl,
           cardUrl: protocol.cardUrl,
           cssClass: protocol.cssClass,
+          inputToOutput: protocol.inputToOutput[i],
           contracts: {
             address: protocol.getContractAddress(4), // TODO this is hardcoding rinkeby network, this should be changed if deploying to main
             functionSig: protocol.functionSig[i],
@@ -76,6 +77,14 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
             quantity: null,
           }
         }
+
+        if (protocol.inputToOutput[i] != null && protocol.hasOutput[i] && protocol.hasInput[i]) {
+          action['output'] = {
+            token: protocol.inputToOutput[i](action['input']['token']),
+            quantity: null,
+          }
+        }
+
         actions.push(action)
       })
     })

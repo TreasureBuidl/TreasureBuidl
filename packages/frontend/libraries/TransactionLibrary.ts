@@ -44,6 +44,10 @@ export class ProjectLibrary {
   // Array of booleans representing whether a function provides an output
   hasOutput: boolean[];
 
+  // hasInput and hasOutput must both be true at an index to have a function at the same index in this array.
+  // Represents when the output is deterministic based on the input. Null if not deterministic
+  inputToOutput: Function[];
+
   getContractAddress(networkId):string {
     for (let network of this.networks) {
       if (network.id == networkId) {
@@ -95,6 +99,11 @@ class UniswapV2Library extends ProjectLibrary {
     this.operations = [Operation.addLiquidity, Operation.removeLiquidity, Operation.swap, Operation.swap]; // TODO there's two swaps here, UI needs to differentiate somehow
     this.hasInput = [true, true, true, true];
     this.hasOutput = [true, true, true, true];
+    this.inputToOutput = [(input: string) => {return "LP " + input}, (input: string) => {
+      console.log(input);
+      if (input.includes("LP")) {return input.split(" ")[1]}
+      else return input;
+    }, null, null]
   }
 }
 
@@ -135,6 +144,10 @@ class AaveLibrary extends ProjectLibrary {
     this.operations = [Operation.deposit, Operation.withdraw, Operation.borrow, Operation.repay, Operation.flashloan];
     this.hasInput = [true, true, false, true, false];
     this.hasOutput = [true, true, true, true, true];
+    this.inputToOutput = [(input: string) => {return "a" + input}, (input: string) => {
+      if (input.startsWith("a")) {return input.substring(1, input.length)}
+      else return input
+    }, null, null, null]
   }
 }
 
@@ -182,6 +195,10 @@ class CompoundLibrary extends ProjectLibrary {
     this.operations = [Operation.deposit, Operation.withdraw, Operation.borrow, Operation.repay];
     this.hasInput = [true, true, false, true];
     this.hasOutput = [true, true, true, false];
+    this.inputToOutput = [(input: string) => {return "c" + input}, (input: string) => {
+      if (input.startsWith("c")) {return input.substring(1, input.length)}
+      else return input
+    }, null, null]
   }
 }
 
@@ -224,8 +241,9 @@ class BalancerLibrary extends ProjectLibrary {
       "Execute a flash loan. This sends the given token amounts to the flash loan receiver contract; all borrowed funds - plus the protocol flash loan fee - must be returned to the vault in the same transaction, or it will revert. Implemented by a FlashLoans subclass. Implemented in FlashLoans."];
     this.paramToolTip = ["", "", ""];
     this.operations = [Operation.swap, Operation.batchSwap, Operation.flashloan];
-    this.hasInput = [true, true, true];
+    this.hasInput = [true, true, false];
     this.hasOutput = [true, true, true];
+    this.inputToOutput = [null, null, null]
   }
 }
 
@@ -250,6 +268,7 @@ class StakeDaoLibrary extends ProjectLibrary {
     this.operations = [Operation.deposit, Operation.withdraw];
     this.hasInput = [true, true];
     this.hasOutput = [true, true];
+    this.inputToOutput = [(input: string) => {return "sd3Crv"}, (input: string) => {return "3Crv"}]
   }
 }
 

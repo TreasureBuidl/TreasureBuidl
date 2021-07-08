@@ -6,9 +6,15 @@ function TokenIcon({token}: {token: Token}) {
   // #TODO: Add the rest of the token images
   const getBackground = (token: Token): string => {
     switch(token) {
+      case Token.aUNI:
+        return 'url(/images/tokens/uniToken.png)'
       case Token.aUSDC:
         return 'url(/images/tokens/usdcToken.png)'
       case Token.aUSDT:
+        return 'url(/images/tokens/usdtToken.png)'
+      case Token.cUSDC:
+        return 'url(/images/tokens/usdcToken.png)'
+      case Token.cUSDT:
         return 'url(/images/tokens/usdtToken.png)'
       case Token.cUNI:
         return 'url(/images/tokens/cUniToken.png)'
