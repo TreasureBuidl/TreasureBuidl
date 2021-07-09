@@ -3,12 +3,35 @@ import Button, {
   ButtonSize,
   ButtonType,
 } from '@components/Button/Button'
+import useEthers from 'hooks/useEthers'
 
 type TreasureMapsProps = {
   treasureMaps: string[]
 }
 
 export default function TreasureMaps({ treasureMaps }: TreasureMapsProps) {
+  const { writeContracts, tx } = useEthers()
+
+  const executeTreasureMap = async (mapId: string) => {
+    const result = tx(writeContracts.TreasurePlanet.execute(mapId), update => {
+      console.log("📡 Transaction Update:", update);
+      if (update && (update.status === "confirmed" || update.status === 1)) {
+        console.log(" 🍾 Transaction " + update.hash + " finished!");
+        console.log(
+          " ⛽️ " +
+            update.gasUsed +
+            "/" +
+            (update.gasLimit || update.gas) +
+            " @ " +
+            parseFloat(update.gasPrice) / 1000000000 +
+            " gwei",
+        );
+      }
+    });
+    console.log("awaiting metamask/web3 confirm result...", result);
+    console.log(await result);
+  }
+
   return (
     <div className="mt-10">
       <h1 className="text-white text-xl mb-4">PREVIOUSLY CREATED</h1>
@@ -22,7 +45,9 @@ export default function TreasureMaps({ treasureMaps }: TreasureMapsProps) {
                   protocolCssClass={ButtonType.Primary}
                   size={ButtonSize.Small}
                   buttonShape={ButtonShape.Regular}
-                  onClick={() => {}}
+                  onClick={() => {
+                    executeTreasureMap(map)
+                  }}
                 >
                   EXECUTE
                 </Button>

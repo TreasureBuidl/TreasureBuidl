@@ -54,7 +54,7 @@ export const EthersProvider = ({ children }) => {
 
   // If you want to make 🔐 write transactions to your contracts, use the userSigner:
   const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
-  const writeContracts = useContractLoader(userSigner, { chainId: localChainId });
+  const writeContracts = useContractLoader(userSigner, treasureAddress, { chainId: localChainId });
 
   const loadCreatedTreasureMaps = useCallback(async (writeContracts, userAddress, tx) => {
     if (writeContracts) {
