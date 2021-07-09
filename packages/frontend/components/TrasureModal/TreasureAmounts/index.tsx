@@ -19,8 +19,8 @@ export default function TreasureAmounts({
             <div className="flex flex-col mb-4">
               {actualTreasureAmounts.map((amount) => {
                 return (
-                  <div className="mt-2">
-                    <TokenAmountRow key={amount.token} amount={amount} />
+                  <div className="mt-2" key={amount.token}>
+                    <TokenAmountRow amount={amount} />
                   </div>
                 )
               })}

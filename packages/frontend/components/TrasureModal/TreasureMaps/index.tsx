@@ -17,7 +17,7 @@ export default function TreasureMaps({ treasureMaps }: TreasureMapsProps) {
         {treasureMaps.length ? (
           <div className="flex flex-col mb-4">
             {treasureMaps.map((map) => (
-              <div className="flex flex-row mb-2">
+              <div className="flex flex-row mb-2" key={map.id}>
                 <div className="mr-4 self-center" style={{ minWidth: 50 }}>{map.id}</div>
                 <Button
                   protocolCssClass={ButtonType.Primary}
