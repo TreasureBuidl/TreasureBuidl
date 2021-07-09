@@ -2,6 +2,7 @@
 /* eslint-disable global-require */
 import { useEffect, useState } from "react";
 const { allContracts } = require("../../onchain/abis/AllContracts")
+const { treasurePlanetContract } = require("../../onchain/abis/TreasurePlanet")
 
 const { ethers } = require("ethers");
 
@@ -34,7 +35,7 @@ const { ethers } = require("ethers");
   - externalContracts: object with chainIds as keys, with an array of contracts for each
 */
 
-export default function useContractLoader(providerOrSigner, config) {
+export default function useContractLoader(providerOrSigner, treasureAddress, config) {
   const [contracts, setContracts] = useState(null);
   useEffect(() => {
     let active = true;
@@ -71,6 +72,17 @@ export default function useContractLoader(providerOrSigner, config) {
           let externalContractList = {};
           try {
             contractList = config.hardhatContracts || allContracts;
+            if (treasureAddress && contractList[_chainId]) {
+              for (const hardhatNetwork in contractList[_chainId]) {
+                contractList[_chainId][hardhatNetwork].contracts = {
+                  ...contractList[_chainId][hardhatNetwork].contracts,
+                  "TreasurePlanet": {
+                    ...treasurePlanetContract,
+                    "address": treasureAddress,
+                  },
+                }
+              }
+            }
           } catch (e) {
             console.log(e);
           }
@@ -120,7 +132,7 @@ export default function useContractLoader(providerOrSigner, config) {
     return () => {
       active = false;
     };
-  }, [providerOrSigner, config.chainId, config.hardhatNetworkName]);
+  }, [providerOrSigner, config.chainId, config.hardhatNetworkName, treasureAddress]);
 
   return contracts;
 }

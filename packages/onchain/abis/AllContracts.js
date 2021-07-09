@@ -1,7 +1,6 @@
 const PlanetFactory = require("./PlanetFactory.json");
 const TokenOwnership = require("./TokenOwnership.json");
 const TreasureMaps = require("./TreasureMaps.json");
-//const TreasurePlanet = require("./TreasurePlanet.json");
 
 export const allContracts = {
   "4": {
@@ -21,7 +20,6 @@ export const allContracts = {
           ...TreasureMaps,
           "address": "0xe46Fa1Ab56370581E110E0d00bd49B9E01E55a70"
         },
-        //"TreasurePlanet": TreasurePlanet
       }
     }
   },
@@ -42,7 +40,6 @@ export const allContracts = {
           ...TreasureMaps,
           "address": "0xF02b24eeA846D393cBC6C774A6F749B11669d46d"
         },
-        //"TreasurePlanet": TreasurePlanet
       }
     }
   }

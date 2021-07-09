@@ -9,18 +9,23 @@ function NavBar() {
 
   return (
     <div className="flex justify-between pt-6 pr-8 pl-8">
-      <div className="flex flex-row justify-between" style={{ width: 350 }}>
+      <div className="flex flex-row justify-start">
         <div
-          className="bg-no-repeat bg-center"
+          className="bg-no-repeat bg-center hover:bg-purple-dark mr-2"
           style={{
             backgroundImage: 'url(/images/protocolIcons/treasureBuidlIcon.png)',
             width: 74,
             height: 52,
           }}
         ></div>
-        <p className="font-display text-4xl text-white self-center">
-          TREASURE BUIDL
-        </p>
+        <div
+          className="bg-no-repeat bg-center hover:bg-purple-dark"
+          style={{
+            backgroundImage: 'url(/images/logoText.png)',
+            width: 324,
+            height: 54,
+          }}
+        ></div>
       </div>
       <div className="flex flex-row space-x-4" style={{ height: 54 }}>
         {isConnected && <TreasureButton />}

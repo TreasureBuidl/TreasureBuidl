@@ -8,15 +8,18 @@ import useContractLoader from "hooks/useContractLoader"
 import useGasPrice from "hooks/useGasPrice"
 import Transactor from "helpers/Transactor"
 const { ethers } = require("ethers")
+const Web3 = require("web3")
 
 const initialEthersState = {
   address: null,
   injectedProvider: null,
   localProvider: null,
+  web3: null,
   web3Modal: null,
   tx: null,
   writeContracts: null,
   treasureAddress: null,
+  createdTreasureMaps: [],
 };
 
 const EthersContext = createContext({
@@ -24,17 +27,21 @@ const EthersContext = createContext({
   loadWeb3Modal: (web3Modal, logoutOfWeb3Modal) => {},
   logoutOfWeb3Modal: () => {},
   loadTreasureAddress: (writeContracts, userAddress, tx) => {},
+  loadCreatedTreasureMaps: (writeContracts, userAddress, tx) => {},
 });
 
 export const EthersProvider = ({ children }) => {
   /// 📡 What chain are your contracts deployed to?
-  const targetNetwork = NETWORKS.rinkeby; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+  const targetNetwork = NETWORKS.kovan; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
   // 🏠 Your local provider is usually pointed at your local blockchain
   const localProviderUrl = targetNetwork.rpcUrl;
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
   const [treasureAddress, setTreasureAddress] = useState();
+  const [createdTreasureMaps, setCreatedTreasureMaps] = useState([]);
   const [localProvider, setLocalProvider] = useState(new ethers.providers.StaticJsonRpcProvider(localProviderUrl));
+  // need Web3 for encoding params later
+  const [web3, setWeb3] = useState(new Web3(localProviderUrl));
   // when connecting to mainnet, use below
   // const mainnetProvider = new ethers.providers.StaticJsonRpcProvider("https://mainnet.infura.io/v3/" + INFURA_ID);
 
@@ -47,7 +54,17 @@ export const EthersProvider = ({ children }) => {
 
   // If you want to make 🔐 write transactions to your contracts, use the userSigner:
   const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
-  const writeContracts = useContractLoader(userSigner, { chainId: localChainId });
+  const writeContracts = useContractLoader(userSigner, treasureAddress, { chainId: localChainId });
+
+  const loadCreatedTreasureMaps = useCallback(async (writeContracts, userAddress, tx) => {
+    if (writeContracts) {
+      const result = await tx(writeContracts.TreasureMaps?.getAllCreatedMaps(userAddress), null);
+      if (result) {
+        const newResult = result.flatMap(i => { return parseInt(i._hex) })
+        setCreatedTreasureMaps(newResult)
+      }
+    }
+  }, [setCreatedTreasureMaps])
 
   const loadTreasureAddress = useCallback(async (writeContracts, userAddress, tx) => {
     if (writeContracts) {
@@ -64,6 +81,8 @@ export const EthersProvider = ({ children }) => {
 
         // get owned treasure
         loadTreasureAddress(writeContracts, newAddress, tx)
+        // get previously created treasure maps
+        loadCreatedTreasureMaps(writeContracts, newAddress, tx)
       }
     }
     getAddress();
@@ -150,13 +169,16 @@ export const EthersProvider = ({ children }) => {
         address,
         injectedProvider,
         localProvider,
+        web3,
         web3Modal,
         tx,
         writeContracts,
         treasureAddress,
+        createdTreasureMaps,
         loadWeb3Modal,
         logoutOfWeb3Modal,
         loadTreasureAddress,
+        loadCreatedTreasureMaps,
       }}
     >
       {children}

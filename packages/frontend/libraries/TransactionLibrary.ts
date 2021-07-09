@@ -44,6 +44,10 @@ export class ProjectLibrary {
   // Array of booleans representing whether a function provides an output
   hasOutput: boolean[];
 
+  // hasInput and hasOutput must both be true at an index to have a function at the same index in this array.
+  // Represents when the output is deterministic based on the input. Null if not deterministic
+  inputToOutput: Function[];
+
   getContractAddress(networkId):string {
     for (let network of this.networks) {
       if (network.id == networkId) {
@@ -95,6 +99,10 @@ class UniswapV2Library extends ProjectLibrary {
     this.operations = [Operation.addLiquidity, Operation.removeLiquidity, Operation.swap, Operation.swap]; // TODO there's two swaps here, UI needs to differentiate somehow
     this.hasInput = [true, true, true, true];
     this.hasOutput = [true, true, true, true];
+    this.inputToOutput = [(input: string) => {return "LP " + input}, (input: string) => {
+      if (input.includes("LP")) {return input.split(" ")[1]}
+      else return input;
+    }, null, null]
   }
 }
 
@@ -135,6 +143,10 @@ class AaveLibrary extends ProjectLibrary {
     this.operations = [Operation.deposit, Operation.withdraw, Operation.borrow, Operation.repay, Operation.flashloan];
     this.hasInput = [true, true, false, true, false];
     this.hasOutput = [true, true, true, true, true];
+    this.inputToOutput = [(input: string) => {return "a" + input}, (input: string) => {
+      if (input.startsWith("a")) {return input.substring(1, input.length)}
+      else return input
+    }, null, null, null]
   }
 }
 
@@ -182,10 +194,13 @@ class CompoundLibrary extends ProjectLibrary {
     this.operations = [Operation.deposit, Operation.withdraw, Operation.borrow, Operation.repay];
     this.hasInput = [true, true, false, true];
     this.hasOutput = [true, true, true, false];
+    this.inputToOutput = [(input: string) => {return "c" + input}, (input: string) => {
+      if (input.startsWith("c")) {return input.substring(1, input.length)}
+      else return input
+    }, null, null]
   }
 }
 
-// #TODO: correct the descriptions, tooltips
 class BalancerLibrary extends ProjectLibrary {
   constructor() {
     super();
@@ -213,24 +228,24 @@ class BalancerLibrary extends ProjectLibrary {
     this.functionSig = [
       "swap(SingleSwap,FundManagement,uint256,uint256)",
       "batchSwap(SwapKind,BatchSwapStep[],IAsset[],FundManagement,int256[],uint256)",
-      "queryBatchSwap(SwapKind,BatchSwapStep[],IAsset[],FundManagement)",
       "flashLoan(IFlashLoanRecipient,IERC20[],uint256[],bytes)"
     ];
     this.fullFunctionSig = [
       "swap(SingleSwap request,FundManagement funds,uint256 limit,uint256 deadline) returns (uint256 assetDelta)",
       "batchSwap(SwapKind kind,BatchSwapStep[] swaps,IAsset[] assets,FundManagement funds,int256[] limits,uint256 deadline)",
-      "queryBatchSwap(SwapKind kind,BatchSwapStep[] swaps,IAsset[] assets,FundManagement funds)",
       "flashLoan(IFlashLoanRecipient recipient,IERC20[] tokens,uint256[] amounts,bytes userData)"
     ];
-    this.description = ["", "", "", ""];
-    this.paramToolTip = ["", "", "", ""];
-    this.operations = [Operation.swap, Operation.batchSwap, Operation.queryBatchSwap, Operation.flashloan];
-    this.hasInput = [true, true, true, true];
-    this.hasOutput = [true, true, true, true];
+    this.description = ["The vault supports 'single swaps,' a way to perform exactly one trade directly and gas-efficiently with a particular pool (e.g., for token sale GUIs). You can still use the internal balance.", 
+      "Batch swap 'steps' specify the assets involved, 'many-to-many' sources and destinations, and min/max token limits to guard against slippage. There is also an optional deadline, after which the swap will timeout and revert. These return the token 'deltas' - the net result of executing each swap sequentially.", 
+      "Execute a flash loan. This sends the given token amounts to the flash loan receiver contract; all borrowed funds - plus the protocol flash loan fee - must be returned to the vault in the same transaction, or it will revert. Implemented by a FlashLoans subclass. Implemented in FlashLoans."];
+    this.paramToolTip = ["", "", ""];
+    this.operations = [Operation.swap, Operation.batchSwap, Operation.flashloan];
+    this.hasInput = [true, true, false];
+    this.hasOutput = [true, true, true];
+    this.inputToOutput = [null, null, null]
   }
 }
 
-// #TODO: correct the networks, function sigs, descriptions, tooltips
 class StakeDaoLibrary extends ProjectLibrary {
   constructor() {
     super();
@@ -238,14 +253,21 @@ class StakeDaoLibrary extends ProjectLibrary {
     this.cardUrl = 'url(/images/cards/whiteCard.png)';
     this.cssClass = 'bg-stakeDao';
     this.protocol = Protocol.StakeDao;
-    this.networks = []
+    this.networks = [
+      {
+        id: 1,
+        name: "Mainnet",
+        contractAddress: "0xB17640796e4c27a39AF51887aff3F8DC0daF9567",
+      }
+    ]
     this.functionSig = ["deposit(uint256)", "withdraw(uint256)"];
-    this.fullFunctionSig = ["deposit(_amount uint256)", "withdraw(_shares uint256)"];
-    this.description = ["", ""];
-    this.paramToolTip = ["", ""];
+    this.fullFunctionSig = ["deposit(uint256 _amount)", "withdraw(uint256 _shares)"];
+    this.description = ["Deposits assets into the vault for staking.", "Withdraws staked assets from the vault."];
+    this.paramToolTip = ["_amount - amount of assets to deposit to the vault", ""];
     this.operations = [Operation.deposit, Operation.withdraw];
     this.hasInput = [true, true];
     this.hasOutput = [true, true];
+    this.inputToOutput = [(input: string) => {return "sd3Crv"}, (input: string) => {return "3Crv"}]
   }
 }
 
