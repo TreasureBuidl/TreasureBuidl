@@ -1,5 +1,4 @@
-{
-    "address": "",
+export const treasurePlanetContract = {
     "abi": [
       {
         "inputs": [
