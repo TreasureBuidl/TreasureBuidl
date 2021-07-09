@@ -3,9 +3,9 @@ import React, {
   useReducer
 } from 'react';
 import lodashClonedeep from 'lodash.clonedeep';
-import { Action, Amount, Token, TreasureMap } from 'types/Treasure.types';
+import { Action, Amount, Token } from 'types/Treasure.types';
 
-const initialTreasureState: { actions: Action[], fromTreasureAmounts: Amount[], toTreasureAmounts: Amount[], actualTreasureAmounts: Amount[], treasureMaps: TreasureMap[] } = {
+const initialTreasureState: { actions: Action[], fromTreasureAmounts: Amount[], toTreasureAmounts: Amount[], actualTreasureAmounts: Amount[] } = {
   actions: [],
   fromTreasureAmounts: [],
   toTreasureAmounts: [],
@@ -21,12 +21,6 @@ const initialTreasureState: { actions: Action[], fromTreasureAmounts: Amount[], 
   {
     token: Token.Ether,
     quantity: 634.95
-  }],
-  treasureMaps: [{
-    id: '1',
-  },
-  {
-    id: '2',
   }],
 };
 

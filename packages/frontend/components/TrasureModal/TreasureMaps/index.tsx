@@ -3,10 +3,9 @@ import Button, {
   ButtonSize,
   ButtonType,
 } from '@components/Button/Button'
-import { TreasureMap } from 'types/Treasure.types'
 
 type TreasureMapsProps = {
-  treasureMaps: TreasureMap[]
+  treasureMaps: string[]
 }
 
 export default function TreasureMaps({ treasureMaps }: TreasureMapsProps) {
@@ -17,8 +16,8 @@ export default function TreasureMaps({ treasureMaps }: TreasureMapsProps) {
         {treasureMaps.length ? (
           <div className="flex flex-col mb-4">
             {treasureMaps.map((map) => (
-              <div className="flex flex-row mb-2">
-                <div className="mr-4 self-center" style={{ minWidth: 50 }}>{map.id}</div>
+              <div className="flex flex-row mb-2" key={map}>
+                <div className="mr-4 self-center" style={{ minWidth: 50 }}>{map}</div>
                 <Button
                   protocolCssClass={ButtonType.Primary}
                   size={ButtonSize.Small}

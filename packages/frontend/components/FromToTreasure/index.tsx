@@ -17,8 +17,8 @@ function FromToTreasure() {
             <div className="flex flex-col mb-4">
               {fromTreasureAmounts.map((amount) => {
                 return (
-                  <div className="mt-2">
-                    <TokenAmountRow key={amount.token} amount={amount} />
+                  <div key={amount.token} className="mt-2">
+                    <TokenAmountRow amount={amount} />
                   </div>
                 )
               })}
@@ -38,8 +38,8 @@ function FromToTreasure() {
             <div className="flex flex-col mb-4">
               {toTreasureAmounts.map((amount) => {
                 return (
-                  <div className="mt-2">
-                    <TokenAmountRow key={amount.token} amount={amount} />
+                  <div key={amount.token} className="mt-2">
+                    <TokenAmountRow amount={amount} />
                   </div>
                 )
               })}

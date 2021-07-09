@@ -5,8 +5,8 @@ import TreasureManagement from './TreasureManagement'
 import TreasureMaps from './TreasureMaps'
 
 export default function TreasureModal({ toggle }) {
-  const { treasureAddress } = useEthers()
-  const { actualTreasureAmounts, treasureMaps } = useTreasure()
+  const { treasureAddress, createdTreasureMaps } = useEthers()
+  const { actualTreasureAmounts } = useTreasure()
 
   return (
     <div className="bg-black bg-opacity-75 h-screen w-screen text-white flex justify-center items-center fixed z-10">
@@ -16,7 +16,7 @@ export default function TreasureModal({ toggle }) {
           actualTreasureAmounts={actualTreasureAmounts}
           treasureAddress={treasureAddress}
         />
-        <TreasureMaps treasureMaps={treasureMaps} />
+        <TreasureMaps treasureMaps={createdTreasureMaps} />
       </div>
     </div>
   )

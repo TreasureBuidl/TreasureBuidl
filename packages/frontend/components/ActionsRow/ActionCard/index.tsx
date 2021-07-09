@@ -1,5 +1,5 @@
 import React from 'react'
-import { Action, Protocol } from 'types/Treasure.types'
+import { Action } from 'types/Treasure.types'
 import AmountInput from '@components/ActionsRow/ActionCard/AmountInput'
 import ProtocolIcon from '@components/ProtocolIcon'
 import useTreasure from 'hooks/useTreasure'
