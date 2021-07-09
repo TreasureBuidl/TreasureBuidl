@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import Button, { ButtonShape, ButtonSize } from '@components/Button/Button'
 import useTreasure from 'hooks/useTreasure'
+import useEthers from 'hooks/useEthers'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { Action, Operation, Protocol, Token } from 'types/Treasure.types'
+import { Action, Token } from 'types/Treasure.types'
 import { libraries } from 'libraries/TransactionLibrary'
 import ProtocolIcon from '@components/ProtocolIcon'
 
@@ -14,6 +15,9 @@ type ActionModalProps = {
 export default function ActionModal({ toggleActionModal }: ActionModalProps) {
   const [actions, setActions] = useState([])
   const { addAction } = useTreasure()
+  const { localProvider } = useEthers()
+
+  const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
 
   const handleActionSelection = (action: Action) => {
     addAction(action)
@@ -58,7 +62,7 @@ export default function ActionModal({ toggleActionModal }: ActionModalProps) {
           cssClass: protocol.cssClass,
           inputToOutput: protocol.inputToOutput[i],
           contracts: {
-            address: protocol.getContractAddress(4), // TODO this is hardcoding rinkeby network, this should be changed if deploying to main
+            address: protocol.getContractAddress(localChainId),
             functionSig: protocol.functionSig[i],
             paramTypes: paramTypes,
             paramNames: paramNames,
