@@ -28,7 +28,7 @@ const EthersContext = createContext({
 
 export const EthersProvider = ({ children }) => {
   /// 📡 What chain are your contracts deployed to?
-  const targetNetwork = NETWORKS.rinkeby; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+  const targetNetwork = NETWORKS.kovan; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
   // 🏠 Your local provider is usually pointed at your local blockchain
   const localProviderUrl = targetNetwork.rpcUrl;
   const [injectedProvider, setInjectedProvider] = useState();
