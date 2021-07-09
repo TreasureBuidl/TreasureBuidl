@@ -100,7 +100,6 @@ class UniswapV2Library extends ProjectLibrary {
     this.hasInput = [true, true, true, true];
     this.hasOutput = [true, true, true, true];
     this.inputToOutput = [(input: string) => {return "LP " + input}, (input: string) => {
-      console.log(input);
       if (input.includes("LP")) {return input.split(" ")[1]}
       else return input;
     }, null, null]
