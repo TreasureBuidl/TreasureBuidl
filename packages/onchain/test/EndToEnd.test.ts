@@ -146,6 +146,75 @@ describe("End To End Test", () => {
 			);
         });
 
+        it.only("Synthesis", async () => {
+            // Address 0xc778417E063141139Fce010982780140Aa0cD5Ab
+            // Function: "deposit(uint256)"
+            console.log(
+                "Wrapping eth",
+                paramBuilder(
+                    [
+                        "uint256"
+                    ],
+                    [
+                        "1"
+                    ]
+                )
+            );
+            // Address 0x2E89EA55fBe203d1B876E69548285468c0CEe1e9
+            // Function: "mint(address,uint256)"
+            console.log(
+                "Wrapping eth",
+                paramBuilder(
+                    [
+                        "address",
+                        "uint256"
+                    ],
+                    [
+                        "0x1B49e47A3100021A5F088fFE850504DdadBb0731",
+                        "500"
+                    ]
+                )
+            );
+            // Address 0x2E89EA55fBe203d1B876E69548285468c0CEe1e9
+            // Function: "transferFrom(address,address,uint256)"
+            console.log(
+                "Wrapping eth",
+                paramBuilder(
+                    [
+                        "address",
+                        "address",
+                        "uint256"
+                    ],
+                    [
+                        "0x1B49e47A3100021A5F088fFE850504DdadBb0731",
+                        "0xdfB1be5E59375f3e627FB892aAf8fa7312035cD7",
+                        "200"
+                    ]
+                )
+            );
+
+            // Address: 
+            // function: "swapETHForExactTokens(uint,address[],address,uint)"
+            // console.log(
+            //     "Wrapping eth",
+            //     paramBuilder(
+            //         [
+            //             "uint", 
+            //             "address[]",
+            //             "address",
+            //             "uint",
+            //         ],
+            //         [
+            //             "2000000000",
+            //             "0xc778417E063141139Fce010982780140Aa0cD5Ab",
+            //             "0x1B49e47A3100021A5F088fFE850504DdadBb0731",
+            //             ""
+            //         ]
+            //         // "0xc778417E063141139Fce010982780140Aa0cD5Ab,0x03e6c12ef405ac3f642b9184eded8e1322de1a9e",
+            //     )
+            // );
+        });
+
         it("Cannot create treasure map with invalid inputs", async () => {
             await expect(
                 treasureMaps.connect(map_creator).createTreasure(
