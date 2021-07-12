@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import "./Inft.sol";
+import "./IExternallyImplementedTypedToken.sol";
 
-abstract contract NewNFT is Inft {
+abstract contract NewNFT is IExternallyImplementedTypedToken {
     struct TokenType {
         // Token name
         string name;
